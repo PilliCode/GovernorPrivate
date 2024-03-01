@@ -24,6 +24,11 @@
 /gov_foundry/lib
 /gov_foundry/out
 
+# Trusted Auth
+/trusted_auth/.vscode
+/trusted_auth/node_modules
+/trusted_auth/rust_web_server/target
+
 # Logs
 frontend/logs
 frontend/*.log
