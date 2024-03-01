@@ -18,9 +18,11 @@
 /privatevotingzkproofs-main/master_verifier/cache/
 /privatevotingzkproofs-main/master_verifier/out/
 
-
-
-
+# Foundry
+/gov_foundry/broadcast
+/gov_foundry/cache
+/gov_foundry/lib
+/gov_foundry/out
 
 # Logs
 frontend/logs
