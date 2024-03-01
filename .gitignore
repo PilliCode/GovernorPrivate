@@ -1,3 +1,8 @@
+# Backend
+/backend/.vscode
+/backend/node_modules
+/backend/rust_web_server/target
+
 # Logs
 frontend/logs
 frontend/*.log
@@ -90,8 +95,10 @@ frontend/out
 # Nuxt.js build / generate output
 frontend/.nuxt
 frontend/dist
-frontend/src/.DS_Store
 
+frontend/src/.DS_Store
+frontend/.DS_Store
+.DS_Store
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
