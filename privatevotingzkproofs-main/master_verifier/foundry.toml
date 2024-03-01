@@ -1,0 +1,9 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+fs_permissions = [{access = "read", path = "./"}]
+gas_reports = ["*"]
+[profile.dependencies]
+OpenZeppelin = {git="https://github.com/OpenZeppelin/openzeppelin-contracts.git", rev="master"}
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

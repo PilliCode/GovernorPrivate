@@ -3,6 +3,25 @@
 /backend/node_modules
 /backend/rust_web_server/target
 
+# ZK
+/privatevotingzkproofs-main/R_add/target/
+/privatevotingzkproofs-main/R_decpercent/target/
+/privatevotingzkproofs-main/R_del/target/
+/privatevotingzkproofs-main/R_del5/target/
+/privatevotingzkproofs-main/R_del10/target/
+/privatevotingzkproofs-main/r_delvecadd/target/
+/privatevotingzkproofs-main/R_enc/target/
+/privatevotingzkproofs-main/R_encsub/target/
+/privatevotingzkproofs-main/R_vecsub/target/
+/privatevotingzkproofs-main/R_vote/target/
+/privatevotingzkproofs-main/master_verifier/lib/
+/privatevotingzkproofs-main/master_verifier/cache/
+/privatevotingzkproofs-main/master_verifier/out/
+
+
+
+
+
 # Logs
 frontend/logs
 frontend/*.log

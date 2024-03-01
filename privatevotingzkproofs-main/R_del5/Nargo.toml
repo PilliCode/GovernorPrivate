@@ -1,0 +1,7 @@
+[package]
+name = "r_del5"
+type = "bin"
+authors = [""]
+compiler_version = ">=0.19.4"
+
+[dependencies]
