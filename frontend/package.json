@@ -1,0 +1,59 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@chakra-ui/icons": "^2.1.0",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/material": "^5.14.5",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.2",
+    "framer-motion": "^10.15.2",
+    "i": "^0.3.7",
+    "npm": "^9.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.10.2",
+    "styled-components": "^5.3.11",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "link-deploy": "node_modules/.bin/symlink-dir /Users/pillicruz-dejesus/gov_private_bravo/compound_gov_bravo/scripts/deploy.js src/deploy",
+    "postinstall": "npm run link-deploy",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "ethers": "^5.4.0"
+  }
+}

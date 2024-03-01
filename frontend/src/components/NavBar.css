@@ -1,0 +1,32 @@
+#navbar{
+    background-color: white;
+}
+.navigation {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    
+    list-style: none;
+    margin-top: 25px; 
+    /* background: deepskyblue; */
+  }
+  .navigation #search {
+    margin-top: 10px;
+    width: 300px;
+  }
+  .navigation a {
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    /* color: white; */
+  }
+  .navigation Button {
+    background-color: black;
+    margin-top: 5px;
+  }
+  .navigation #headbargov{
+    font-size: large;
+  }
+  .navigation #spacing{
+    width:200px;
+  }

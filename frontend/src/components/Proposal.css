@@ -1,0 +1,60 @@
+#nounify{
+    font-size: x-large;
+    font-weight:bolder;
+}
+#spacer{
+    width:10vw;
+}
+#nounsimg{
+    border-radius: 50%;
+    height:6vh;
+}
+#cardheader{
+    font-size: large;
+    font-weight: bold;
+}
+#paydustin{
+    text-align: start;
+    font-size: x-large;
+    font-weight: bolder;
+}
+#executed{
+    width: 20vw;
+    font-weight: bold;
+}
+#unblinded{
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 2vh;
+
+}
+#unblinded1{
+    /* font-weight: bold; */
+    font-size: medium;
+    margin-bottom: 1vh;
+}
+#myselfdiv{
+    width:25vw
+}
+#nounsimgvote{
+    border-radius: 50%;
+    height:4.2vh;
+    /* marg */
+    /* margin-left: 1vw; */
+    /* margin-bottom: 1vh; */
+}
+#votetext{
+    margin-top: 0.5vh;
+    font-size: 1vh;
+    /* width: 10vw; */
+}
+#votemsg{
+    align-self: baseline;
+    font-size: 1.2vh;
+}
+#votefailed{
+    color: red;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    text-align: center;
+}

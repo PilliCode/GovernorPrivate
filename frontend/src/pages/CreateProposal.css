@@ -1,0 +1,19 @@
+#connectwallet{
+    font-size: medium;
+    font-weight: bold;
+    color:gray
+}
+#nounsiconcreateproposal{
+    border-radius: 50%;
+    height:6vh;
+}
+
+#proposalseperator{
+    margin-top: 2vh;
+}
+
+#exampletext{
+    text-align: left;
+    font-size: small;
+    width: 50vw;
+}

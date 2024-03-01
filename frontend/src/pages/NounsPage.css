@@ -1,0 +1,101 @@
+
+#divider {
+    margin-top:20px;
+}
+#nounsinfocard {
+    /* margin-top: 3vh; */
+}
+    #nounsinfocard #nounsicon{
+        border-radius: 50%;
+        height:100px
+    }
+    #nounsinfocard h1{
+        width: 12vw;
+        font-size: 1.7vw;
+        font-weight: bold;
+    }
+    #nounsinfocard #spacing {
+        width:2vw;
+    }
+    #nounsinfocard #description {
+        margin-top: 2vh;
+    }
+    #nounsinfocard #tags {
+        margin-top: 2vh;
+    }
+
+#nounsnumberscard{
+    margin-top: 20px;
+    height: 11vh;
+}
+    #nounsnumberscard #stack{
+        display: flex;
+        margin-top: 20px;
+        justify-content: space-evenly;
+    }
+    #nounsnumberscard h1{
+        font-size: x-large;
+        font-weight: bold;
+    }
+    #nounsnumberscard p{
+        font-size: large;
+    }
+
+#nounsproposals{
+    margin-top: 20px;
+    height: 40vh;
+    overflow-y:auto;
+}
+
+    #nounsproposals h1{
+        font-size: large;
+        font-weight: bold;
+    }
+    #nounsproposals #spacing{
+        width:50vw;
+    }
+    #nounsproposals #passed{
+        color:green;
+    }
+    #nounsproposals #failed{
+        color:red;
+    }
+    #nounsproposals #divider{
+        margin-top: 10px;
+    }
+    #nounsproposals #firstflex{
+        margin-top: 10px;
+    }
+    #nounsproposals #proposal{
+        margin-left: 100px;
+    }
+    #nounsproposals #proposalstack{
+        /* margin-top: 2vh; */
+    }
+        #nounsproposals #proposalstack #nounsicon{
+            border-radius: 50%;
+            height:50px
+        }
+        #nounsproposals #proposalstack #verticalstack{
+            align-items:baseline
+        }
+        #nounsproposals #proposalstack #proposalspacer{
+            width: 12vw;
+        }
+        #nounsproposals #proposalstack p{
+            /* margin-left: 7vw; */
+            font-size: medium;
+        }
+        #nounsproposals #proposalstack #votesfor{
+            /* margin-left: 9vw; */
+            color:green;
+        }
+        #nounsproposals #proposalstack #votesagainst{
+            margin-left: 9vw;
+            color:red;
+        }
+        #nounsproposals #proposalstack #votestotal{
+            margin-left: 9vw;
+            /* color:red; */
+        }
+
