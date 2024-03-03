@@ -5,11 +5,7 @@ use dep::std::ec::consts::te::baby_jubjub;
 use dep::std::ec::tecurve::affine::{Curve, Point};
 use dep::std::field;
 
-// potential speedup if we hardcode max path_len to constant 20
 fn custom_compute_merkle_root(leaf: Field, index: Field, hash_path: [Field; 20]) -> Field {
-    // first, ascertain the working length of the path.
-
-    //let n = hash_path.len();
     let n = 20;
     let index_bits = index.to_le_bits(n as u32);
     let mut current = leaf;
@@ -31,7 +27,6 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
     let mut scalar_as_bits: [u1; 254] = [0; 254];
     let tmp = scalar.to_be_bits(crate::field::modulus_num_bits() as u32);
 
-    // 251 instead of 0?
     for i in 221..254 {
         scalar_as_bits[i] = tmp[i];
     }
@@ -77,16 +72,14 @@ fn main(
     let bjj_curve = baby_jubjub();
     let pk = Point::new(pk_enc_x, pk_enc_y);
 
-    // what if the delegate address specified in the proof is not in the anonymity set?
     for i in 0..20 {
-        // NOTE: for testing, do NOT use delegate address = 0
         if delegates[i] != 0 {
             // if it isn't padding.
             let mut target = 0; // if it isn't the delegate, make sure it's the encryption of 0
             if delegates[i] == delegate_addr {
                 target = t_v; // make sure it's the encryption of t_v
             }
-            // verify the encryption
+            // verify the encryption of 0
             let c_e = Point::new(cts[(i * 4) + 0], cts[(i * 4) + 1]); // e_x, e_y
             let c_v = Point::new(cts[(i * 4) + 2], cts[(i * 4) + 3]); // v_x, v_y
 
@@ -94,7 +87,6 @@ fn main(
 
             let w = bjj_curve.curve.mul(ct_random_states[i], pk);
 
-            //let g_m = bjj_curve.curve.mul(target, bjj_curve.base8);
             let g_m = custom_compute_mult(target, bjj_curve.base8);
 
             let e = bjj_curve.curve.add(w, g_m);
@@ -112,6 +104,5 @@ fn main(
             assert(bjj_curve.curve.add(c_e, e2).eq(e_res));
             assert(bjj_curve.curve.add(c_v, v2).eq(v_res));
         }
-        // assert if summand and sum is 0'd out if delegate is 0?
     }
 }

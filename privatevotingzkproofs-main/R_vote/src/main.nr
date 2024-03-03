@@ -39,8 +39,6 @@ fn verify_rerand(
     //let bjj_curve = Curve::new(168700, 168696, Point::new(995203441582195749578291179787384436505546430278305826713579947235728471134,5472060717959818805561601436314318772137091100104008585924551046643952123905));
     let bjj_curve = baby_jubjub();
     //let g = Point::new(995203441582195749578291179787384436505546430278305826713579947235728471134, 5472060717959818805561601436314318772137091100104008585924551046643952123905);
-    // these are coordinates for the 'base point' B
-    //let base_point = Point::new(5299619240641551281634865583518297030282874472190772894086521144482721001553, 16950150798460657717958625567821834550301663161624707787222815936182638968203);
 
     // reconstruct points from coordinates
     let pk = Point::new(pk_x, pk_y);
@@ -51,7 +49,6 @@ fn verify_rerand(
 
     // do re-randomization
     let g_r = bjj_curve.curve.mul(random_state, bjj_curve.base8); //.base8, .curve
-    //let g_r = bjj_curve.curve.mul(random_state, g); 
     let pk_r = bjj_curve.curve.mul(random_state, pk);
 
     let v_rerand = bjj_curve.curve.add(v, g_r);
@@ -72,7 +69,7 @@ fn verify_encrypt(
     c_v_x: Field,
     c_v_y: Field
 ) {
-    let bjj_curve = baby_jubjub(); // maybe it's slow to define this in non-main function
+    let bjj_curve = baby_jubjub();
 
     let pk = Point::new(pk_x, pk_y);
     let c_e = Point::new(c_e_x, c_e_y);
@@ -100,7 +97,6 @@ fn main(
     root_eid: pub Field,
     voting_power_hashpath: pub [Field; 20]
 ) {
-    //assert(i <= 2 && i >= 0);
     assert(i as u64 <= 2);
 
     let bjj_curve = baby_jubjub();
@@ -134,11 +130,6 @@ fn main(
             assert(e_rerand.eq(c_e));
         } else {
             // verify the encryption
-            // NOTE: mul by 0?? Same issue in R_del
-            // make this the point at infinity 0,1,0?
-            //let g_m = bjj_curve.curve.mul(0, bjj_curve.base8);
-            //let g_m = Point::new(0, 1);
-            //let e = bjj_curve.curve.add(pk_r, g_m);
             let e = pk_r;
 
             assert(e.eq(c_e));

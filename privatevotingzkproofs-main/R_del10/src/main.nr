@@ -5,11 +5,7 @@ use dep::std::ec::consts::te::baby_jubjub;
 use dep::std::ec::tecurve::affine::{Curve, Point};
 use dep::std::field;
 
-// potential speedup if we hardcode max path_len to constant 20
 fn custom_compute_merkle_root(leaf: Field, index: Field, hash_path: [Field; 20]) -> Field {
-    // first, ascertain the working length of the path.
-
-    //let n = hash_path.len();
     let n = 20;
     let index_bits = index.to_le_bits(n as u32);
     let mut current = leaf;
@@ -36,7 +32,6 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
     }
 
     // do add-n-double on scalar bits and point
-    //let mut tmp_p = Point::new(point.x, point.y);
     let mut tmp_p = Point::zero();
     assert(bjj_curve.curve.contains(point)); // verify one summand on curve
 
@@ -69,7 +64,6 @@ fn main(
     sum: pub [Field; 10 * 4]
 ) {
     //do merkle tree inclusion check
-    //let leaf = hash::pedersen([t_v])[0];
     let leaf = hash::poseidon::bn254::hash_1([t_v]);
     assert(vote_root == custom_compute_merkle_root(leaf, vote_idx, vote_hashpath));
 
@@ -78,7 +72,6 @@ fn main(
 
     // what if the delegate address specified in the proof is not in the anonymity set?
     for i in 0..10 {
-        // NOTE: for testing, do NOT use delegate address = 0
         if delegates[i] != 0 {
             // if it isn't padding.
             let mut target = 0; // if it isn't the delegate, make sure it's the encryption of 0
@@ -111,6 +104,5 @@ fn main(
             assert(bjj_curve.curve.add(c_e, e2).eq(e_res));
             assert(bjj_curve.curve.add(c_v, v2).eq(v_res));
         }
-        // assert if summand and sum is 0'd out if delegate is 0?
     }
 }

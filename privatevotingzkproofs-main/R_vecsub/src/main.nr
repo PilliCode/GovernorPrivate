@@ -3,10 +3,6 @@ use dep::std;
 use dep::std::ec::consts::te::baby_jubjub;
 use dep::std::ec::tecurve::affine::{Curve, Point};
 
-// fn verify_add(e1: Point, v1: Point, e2: Point, v2: Point, e_res: Point, v_res: Point) {
-
-// }
-
 fn main(summand1: pub [Field; 20 * 4], summand2: pub [Field; 20 * 4], sum: pub [Field; 20 * 4]) {
     let bjj_curve = baby_jubjub();
 
