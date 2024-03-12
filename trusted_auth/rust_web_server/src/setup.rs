@@ -67,15 +67,12 @@ async fn trusted_auth_helper(dao_data: Json<DaoData>) -> Result<String,Error> {
 
 
 async fn deploy_governance(pk_x: String, pk_y: String, rt_str: String, rt_sig_str: String, sig_pk_str: String) -> Result<String,Error> {
-    println!("before abi");
-
     abigen!(
         Gov,
         "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
         Timelock,
         "../../trusted_auth/rust_web_server/src/abi/Timelock.json";
     );
-    println!("after abi");
     // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
