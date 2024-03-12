@@ -7,5 +7,6 @@ WORKDIR /app/gov_foundry
 
 EXPOSE 8545
 
+Run forge remappings
 RUN forge build
 ENTRYPOINT anvil --base-fee 0 --balance 1000000000000 --accounts 25 --code-size-limit 30000 --host 0.0.0.0 --port 8545 

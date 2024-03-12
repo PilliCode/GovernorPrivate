@@ -5,5 +5,6 @@ COPY gov_foundry/ ./gov_foundry
 
 WORKDIR /app/gov_foundry
 
+Run forge remappings
 RUN forge build
 ENTRYPOINT forge script script/Setup.s.sol:Setup --rpc-url http://foundry:8545 --broadcast --code-size-limit 30000
