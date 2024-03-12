@@ -13,10 +13,12 @@ use hex::FromHex;
 use ark_crypto_primitives::Error;
 
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, Filter, H160, U256},
     providers::{Http, Middleware, Provider},
 };
+//use ethers_contract_abigen::Abigen;
+
 use crate::constants::GOV_ADDRESS;
 use crate::util::{get_log_data, get_pk};
 use crate::bjj_ah_elgamal;
@@ -38,10 +40,6 @@ pub struct Proposal {
     call_datas: Vec<String>, 
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
 
 async fn election_setup_helper(data: Json<Proposal>)-> Result<String,Error>{
     let start_time = SystemTime::now();
@@ -70,12 +68,16 @@ async fn election_setup_onchain(
     enc_zero: (PointProjective, PointProjective)
     ) -> Result<String,Error> {
    
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
     /* Used the default key for the first account */
     let wallet: Wallet<SigningKey> = "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80".parse()?;    
     let wallet = wallet.with_chain_id(31337_u64);
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?;
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
     let client = Arc::new(SignerMiddleware::new(provider, wallet));
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     let cex =  bjj_ah_elgamal::point_x_str(&enc_zero.0.affine());
     let cey =  bjj_ah_elgamal::point_y_str(&enc_zero.0.affine());

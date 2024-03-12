@@ -15,10 +15,12 @@ use hex::{FromHex, encode};
 use ark_crypto_primitives::Error;
 
 use ethers::{
-    contract::abigen,
+    contract::{Abigen,abigen},
     core::types::{Address, U256,Filter},
     providers::{Http, Provider},
 };
+// //use ethers_contract_abigen::Abigen;
+
 
 use poseidon_rs::Fr;
 use ff::PrimeField;
@@ -37,10 +39,6 @@ pub struct Vote {
     message: String,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
 
 #[options("/private_vote")]
 pub fn options_private_vote() -> &'static str {
@@ -93,18 +91,18 @@ async fn private_vote_helper(data: Json<Vote>)-> Result<String,Error>{
     };
 
     /* generate proof */
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_add/Prover.toml").expect("Failed to create file");
+    let mut file = File::create("privatevotingzkproofs/R_add/Prover.toml").expect("Failed to create file");
     file.write_all(toml::to_string(&toml_value).unwrap().as_bytes())
         .expect("Failed to write to file");
     let proof_start_time = start_time.elapsed()?.as_secs();
 
     println!("Beginning proof generation...");
     
-    Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_add")
+    Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_add")
     .output().expect("failed to execute process");
     
     println!("Proof generation completed. Took {} seconds", start_time.elapsed()?.as_secs()-proof_start_time);
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_add/proofs/R_add.proof")?;
+    let proof = std::fs::read_to_string("privatevotingzkproofs/R_add/proofs/R_add.proof")?;
     let r_add = create_radd(orig_votes,my_vote,res_vote)?;
 
     /* vote on chain */
@@ -118,9 +116,13 @@ async fn private_vote_helper(data: Json<Vote>)-> Result<String,Error>{
 }
 
 async fn vote_onchain(data: Json<Vote>, r_add: [[u8; 32]; 12], root: String, hashpath: Vec<Fr>, leaf_index: u32, proof: String) -> Result<String,Error>{
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());    
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());    
     let hash_path_onchain = transform_hash_path(hashpath)?;
     let leaf_onchain = <[u8; 32]>::from_hex(&pad_hex(&format!("{:x}",leaf_index))[2..])?;
 
@@ -170,9 +172,13 @@ fn create_radd(
 }
 
 async fn get_proposal_votes(data: &Json<Vote>) -> Result<(PointProjective,PointProjective),Error> {
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
+    // let provider = Provider::<Http>::try_from("http://:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     let proposal_votes = contract.get_proposal_votes(
         U256::from(data.vote.clone()),
@@ -186,7 +192,8 @@ async fn get_proposal_votes(data: &Json<Vote>) -> Result<(PointProjective,PointP
 
 async fn get_ld_snapshot(data: &Json<Vote>) -> Result<Vec<[String;4]>,Error>{
     // all we need is to get emit log from election_start and that will be our ct
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
 
     /* get election start log for this proposal because emitted cs is there */
@@ -217,7 +224,7 @@ async fn get_ld_snapshot(data: &Json<Vote>) -> Result<Vec<[String;4]>,Error>{
 
 
 async fn get_proof_ld(data: &Json<Vote>) -> Result<(Vec<Fr>,String,(PointProjective,PointProjective),u32),Error> {
-    // let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);    
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);    
     // let client = Arc::new(provider);
     // let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     // let ld_vec = contract.get_ld().call().await?;

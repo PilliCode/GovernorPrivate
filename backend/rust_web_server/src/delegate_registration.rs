@@ -11,10 +11,11 @@ use hex::FromHex;
 use ark_crypto_primitives::Error;
 
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::Address,
     providers::{Http, Provider},
 };
+
 
 use crate::constants::GOV_ADDRESS;
 
@@ -31,12 +32,6 @@ pub struct UserAddr {
     addr: String,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-    TokenContract,
-    "/Users/pillicruz-dejesus/gov_private_bravo/backend/rust_web_server/src/abi/PrivateToken.json";
-);
 
 
 #[options("/delegate_registration")]
@@ -89,18 +84,18 @@ async fn delegate_registration_helper(data: Json<UserAddr>)-> Result<String,Erro
     };
     
     /* Generate proof  */
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc/Prover.toml").expect("Failed to create file");
+    let mut file = File::create("privatevotingzkproofs/R_enc/Prover.toml").expect("Failed to create file");
     file.write_all(toml::to_string(&toml_value).unwrap().as_bytes()).expect("Failed to write to file");
     
     println!("Beginning proof generation...");
     let proof_start_time = start_time.elapsed()?.as_secs();
     
-    let _ = Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc")
+    let _ = Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_enc")
     .output().expect("failed to execute process");
    
     println!("Proof generation completed. Took {} seconds", start_time.elapsed()?.as_secs()-proof_start_time);
 
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc/proofs/R_enc.proof")?;
+    let proof = std::fs::read_to_string("privatevotingzkproofs/R_enc/proofs/R_enc.proof")?;
     
     
     /* Delegate on chain */
@@ -124,15 +119,19 @@ async fn delegate_onchain(
     proof_str: String, 
                             ) -> Result<bool,Error> {
 
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
     let hex_bal = format!("{:x}", token_bal);
     let zeros_needed = 64 - hex_bal.to_string().len();
     let hex_token_bal = "0".repeat(zeros_needed) + &hex_bal.to_string();
 
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);
     
     let client = Arc::new(provider);
     // GOV::
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     println!("Contract: {:?}",contract.register_delegate(<[u8; 32]>::from_hex(hex_token_bal)?, 
     <[u8; 32]>::from_hex(&c_e_x[2..])?, 
     <[u8; 32]>::from_hex(&c_e_y[2..])?, 
@@ -186,15 +185,16 @@ pub async fn setup_delegates_helper() -> Result<String,Error> {
     };
     
 
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc/Prover.toml").expect("Failed to create file");
-    file.write_all(toml::to_string(&toml_value).unwrap().as_bytes()).expect("Failed to write to file");
-
-    let _ = Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc")
-    .output().expect("failed to execute process");
-
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_enc/proofs/R_enc.proof")?;
+ 
 
     for delegate in delegates{
+        let mut file = File::create("privatevotingzkproofs/R_enc/Prover.toml").expect("Failed to create file");
+        file.write_all(toml::to_string(&toml_value).unwrap().as_bytes()).expect("Failed to write to file");
+    
+        let _ = Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_enc")
+        .output().expect("failed to execute process");
+    
+        let proof = std::fs::read_to_string("privatevotingzkproofs/R_enc/proofs/R_enc.proof")?;
         println!("Registering {} as delegate", delegate);
         delegate_onchain(token_bal, delegate.to_owned(), c_e_x.clone(), c_e_y.clone(), c_v_x.clone(), c_v_y.clone(), proof.clone()).await?;
     }

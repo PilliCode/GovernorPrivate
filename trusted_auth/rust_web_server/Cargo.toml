@@ -6,9 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-noir_rs = { git = "https://github.com/visoftsolutions/noir_rs.git", branch = "latest", package = "noir_rs" }
 ethabi = "5.0"
-web3 = "0.17"
 ethers = { version = "2.0", features = ["legacy"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.108"

@@ -1,11 +1,13 @@
 use rocket::serde::json::Json;
 use ark_crypto_primitives::Error;
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, Filter, U256},
     providers::{Http, Middleware, Provider},
     utils::{parse_units, ParseUnits},
 };
+//use ethers_contract_abigen::Abigen;
+
 use std::{sync::Arc, time::SystemTime};
 use crate::utils::util::{get_rt, write_to_file, StoredSk}; // requires 'getrandom' feature
 use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS,TIMELOCK_CONTRACT_ADDRESS};
@@ -25,12 +27,7 @@ pub struct DaoData {
   token_addr: String,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-    TIMELOCK,
-    "/Users/pillicruz-dejesus/gov_private_bravo/trusted_auth/rust_web_server/src/abi/Timelock.json";
-);
+
 
 
 async fn trusted_auth_helper(dao_data: Json<DaoData>) -> Result<String,Error> {
@@ -46,6 +43,7 @@ async fn trusted_auth_helper(dao_data: Json<DaoData>) -> Result<String,Error> {
 
     /* pk and sk for for signature from https://docs.rs/k256/latest/k256/ecdsa/ */
     let sig_sk = SigningKey::random(&mut OsRng);
+
     let sig_pk = VerifyingKey::from(&sig_sk);
 
     /* search through emit logs to create balance mapping */
@@ -54,7 +52,6 @@ async fn trusted_auth_helper(dao_data: Json<DaoData>) -> Result<String,Error> {
     /* Sign merkle root and verify it  */
     let rt_sig: Signature = sig_sk.sign(rt.to_string().as_bytes());
     assert!(sig_pk.verify(rt.to_string().as_bytes(), &rt_sig).is_ok());
-   
 
     /*Write keys, signatures to file keys.txt */
     let d = StoredSk {
@@ -70,19 +67,28 @@ async fn trusted_auth_helper(dao_data: Json<DaoData>) -> Result<String,Error> {
 
 
 async fn deploy_governance(pk_x: String, pk_y: String, rt_str: String, rt_sig_str: String, sig_pk_str: String) -> Result<String,Error> {
+    println!("before abi");
 
-    
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    abigen!(
+        Gov,
+        "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
+        Timelock,
+        "../../trusted_auth/rust_web_server/src/abi/Timelock.json";
+    );
+    println!("after abi");
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
+    println!("before timelock ");
 
     /* deploy timelock */
-    let _ = TIMELOCK::deploy(client.clone(), (DEFAULT_USER.parse::<Address>()?, U256::from(172800)))?.send().await?;
+    let _ = Timelock::deploy(client.clone(), (DEFAULT_USER.parse::<Address>()?, U256::from(172800)))?.send().await?;
     println!("Deployed timelock contract");
 
     /* deploy governance */
     let pu: ParseUnits = parse_units("1000.0", "ether").unwrap();
     let num = U256::from(pu);
-    let gov = GOV::deploy(client.clone(), (TIMELOCK_CONTRACT_ADDRESS.parse::<Address>()?, TOKEN_CONTRACT_ADDRESS.parse::<Address>()?, U256::from(10000), U256::from(2), num))?.send().await?;
+    let gov = Gov::deploy(client.clone(), (TIMELOCK_CONTRACT_ADDRESS.parse::<Address>()?, TOKEN_CONTRACT_ADDRESS.parse::<Address>()?, U256::from(10000), U256::from(2), num))?.send().await?;
         
     /*initialize governance */
     let start_time = SystemTime::now();

@@ -1,9 +1,11 @@
 use ark_crypto_primitives::Error;
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, Filter, U256},
     providers::{Http, Middleware, Provider},
 };
+//use ethers_contract_abigen::Abigen;
+
 use std::{collections::HashMap, sync::Arc};
 use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS};
 use ethers::abi::AbiEncode;
@@ -25,16 +27,10 @@ pub struct StoredSk {
     pub(crate) sk: u128,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-
-    TokenContract,
-    "/Users/pillicruz-dejesus/gov_private_bravo/backend/rust_web_server/src/abi/PrivateToken.json";
-);
 
 pub async fn get_log_data() -> Result<(String,String),Error> {
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
 
     // Check emit log to see if initialize was emitted
@@ -55,7 +51,8 @@ pub async fn get_rt() -> Result<(poseidon_rs::Fr, Vec<poseidon_rs::Fr>),Error> {
     let mut lt_addr_to_index: HashMap<Address, usize> = HashMap::new();
     let mut lt: HashMap<Address, U256> = HashMap::new();
 
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?;
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
     let client = Arc::new(provider);
     let filter = Filter::new()
         .address(TOKEN_CONTRACT_ADDRESS.parse::<Address>()?)

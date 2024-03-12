@@ -8,10 +8,12 @@ use std::fs::File;
 use hex::{encode, FromHex};
 use ark_crypto_primitives::Error;
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, U256},
     providers::{Http, Provider},
 };
+//use ethers_contract_abigen::Abigen;
+
 use crate::constants::GOV_ADDRESS;
 use crate::util::{get_ld, read_from_file, strings_to_pointprojective, transform_vec_str_to_arr_u832, u832_to_pointprojective};
 use crate::bjj_ah_elgamal;
@@ -22,11 +24,6 @@ use std::time::SystemTime;
 pub struct User {
     user_addr: String,
 }
-
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
 
 #[options("/undelegate")]
 pub fn options_undelegate() -> &'static str {
@@ -120,15 +117,15 @@ async fn undelegate_helper(data: Json<User>)-> Result<String,Error>{
     /* Generate proof */
     println!("Beginning proof generation...");
     let proof_start_time = start_time.elapsed()?.as_secs();
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_vecsub/Prover.toml").expect("Failed to create file");
+    let mut file = File::create("privatevotingzkproofs/R_vecsub/Prover.toml").expect("Failed to create file");
     file.write_all(toml::to_string(&toml_value).unwrap().as_bytes())
         .expect("Failed to write to file");
     
     println!("Proof generation completed. Took {} seconds", start_time.elapsed()?.as_secs()-proof_start_time);
     
-    Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_vecsub")
+    Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_vecsub")
     .output().expect("failed to execute process");
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_vecsub/proofs/R_vecsub.proof")?;
+    let proof = std::fs::read_to_string("privatevotingzkproofs/R_vecsub/proofs/R_vecsub.proof")?;
    
     /* UnDelegate on chain */
     println!("Beginning on chain registration...");
@@ -152,9 +149,13 @@ async fn undelegate_onchain(
     anonymity_size: usize,
     proof_str: String) -> Result<bool,Error> {
 
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     /* transform vecs for onchain consumption */
     let ct_new_onchain = transform_vec_str_to_arr_u832(ct_new_vec)?;

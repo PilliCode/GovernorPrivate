@@ -53,7 +53,7 @@ impl Fairing for Cors {
 fn rocket() -> _ {
     rocket::build()
         .attach(Cors)
-        .configure(rocket::Config::figment().merge(("port", 9999)))
+        .configure(rocket::Config::figment().merge(("address", "0.0.0.0")).merge(("port", 9999)))
         .mount(
             "/",
             routes![trusted_auth_setup, options_trusted_auth_setup, decrypt_tally_call, options_decrypt_tally],

@@ -1,26 +1,27 @@
 
 
-FROM --platform=linux/amd64 node:lts-bookworm-slim
-SHELL ["/bin/bash", "-c"]
-RUN apt update && apt install -y curl bash git tar gzip libc++-dev
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-RUN curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
-ENV PATH="/root/.nargo/bin:$PATH"
-RUN noirup
-# ENTRYPOINT ["nargo"]
+# FROM --platform=linux/amd64 node:lts-bookworm-slim
+# SHELL ["/bin/bash", "-c"]
+# RUN apt update && apt install -y curl bash git tar gzip libc++-dev
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     curl \
+#     ca-certificates \
+#     build-essential \
+#     && rm -rf /var/lib/apt/lists/*
+# RUN curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+# ENV PATH="/root/.nargo/bin:$PATH"
+# RUN noirup
+# # ENTRYPOINT ["nargo"]
 
-# install rust
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
+# # install rust
+# RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
 
-# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --help
-ENV PATH="/root/.cargo/bin:${PATH}"
+# # RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --help
+# ENV PATH="/root/.cargo/bin:${PATH}"
 
-# Confirm Rust installation
-RUN cargo install --git https://github.com/foundry-rs/foundry --profile local --locked forge cast chisel anvil
+# # Confirm Rust installation
+# RUN cargo install --git https://github.com/foundry-rs/foundry --profile local --locked forge cast chisel anvil
+FROM ghcr.io/foundry-rs/foundry
 
 # RUN curl -L https://foundry.paradigm.xyz | bash
 

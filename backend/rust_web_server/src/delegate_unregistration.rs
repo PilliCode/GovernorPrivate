@@ -11,10 +11,12 @@ use hex::FromHex;
 use ark_crypto_primitives::Error;
 
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, Filter},
     providers::{Http, Middleware, Provider}
 };
+//use ethers_contract_abigen::Abigen;
+
 
 use crate::constants::{DEFAULT_USER, GOV_ADDRESS};
 
@@ -28,14 +30,6 @@ pub struct UserAddr {
     // Define your structure to deserialize the data
     addr: String,
 }
-
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-
-    TokenContract,
-    "/Users/pillicruz-dejesus/gov_private_bravo/backend/rust_web_server/src/abi/PrivateToken.json";
-);
 
 
 #[post("/delegate_unregistration", format = "json", data = "<data>")]
@@ -94,18 +88,18 @@ async fn delegate_unregistration_helper(data: Json<UserAddr>) -> Result<String,E
     };
 
     /* Generate proof */
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_encsub/Prover.toml").expect("Failed to create file");
+    let mut file = File::create("privatevotingzkproofs/R_encsub/Prover.toml").expect("Failed to create file");
     file.write_all(toml::to_string(&toml_value).unwrap().as_bytes()).expect("Failed to write to file");
 
     let proof_start_time = start_time.elapsed()?.as_secs();
     println!("Beginning proof generation...");
 
-    let _ = Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_encsub")
+    let _ = Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_encsub")
     .output().expect("failed to execute process");
 
     println!("Proof generation completed. Took {} seconds", start_time.elapsed()?.as_secs()-proof_start_time);
 
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_encsub/proofs/R_encsub.proof")?;
+    let proof = std::fs::read_to_string("privatevotingzkproofs/R_encsub/proofs/R_encsub.proof")?;
 
     /* Delegate on chain */
     let delegate_start_time = start_time.elapsed().expect("SystemTime elapsed failed").as_secs();
@@ -135,15 +129,20 @@ async fn undelegate_onchain(
     new_c_v_y: String,  
     proof: String, 
                             ) -> Result<bool,Error> {
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
     /* parse token balance */
     let hex_bal = format!("{:x}", token_bal);
     let zeros_needed = 64 - hex_bal.to_string().len();
     let hex_token_bal = "0".repeat(zeros_needed) + &hex_bal.to_string();
 
 
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(addr.parse::<Address>()?);    
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);    
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);
+
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     println!("Contract: {:?}",contract.unregister_delegate(<[u8; 32]>::from_hex(hex_token_bal)?, 
     <[u8; 32]>::from_hex(&old_c_e_x[2..])?, 
     <[u8; 32]>::from_hex(&old_c_e_y[2..])?, 

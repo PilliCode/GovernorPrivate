@@ -12,10 +12,11 @@ use toml;
 use ark_crypto_primitives::Error;
 
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, U256},
     providers::{Http, Provider},
 };
+//use ethers_contract_abigen::Abigen;
 
 use crate::utils::constants::GOV_ADDRESS;
 use crate::utils::util::{get_log_data, pad_hex, read_from_file, u832_to_pointprojective, create_cts};
@@ -32,10 +33,7 @@ pub struct TallyInfo {
     id: u128,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
+
 
 async fn decrypt_tally_helper(data: Json<TallyInfo>)-> Result<String,Error>{
     let start_time = SystemTime::now();
@@ -81,16 +79,16 @@ async fn decrypt_tally_helper(data: Json<TallyInfo>)-> Result<String,Error>{
     };
 
     /* Generate and read proof */
-    let mut file = File::create("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_decpercent/Prover.toml").expect("Failed to create file");
+    let mut file = File::create("privatevotingzkproofs/R_decpercent/Prover.toml").expect("Failed to create file");
     file.write_all(toml::to_string(&toml_value).unwrap().as_bytes())
         .expect("Failed to write to file");
 
     println!("Generating proof: {} second(s)",start_time.elapsed().expect("SystemTime elapsed failed").as_secs());
-    let _ = Command::new("nargo").args(["prove"]).current_dir("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_decpercent")
+    let _ = Command::new("nargo").args(["prove"]).current_dir("privatevotingzkproofs/R_decpercent")
     .output().expect("failed to execute process");
     println!("Voting on chain timestamp: {} second(s)",start_time.elapsed().expect("SystemTime elapsed failed").as_secs());
 
-    let proof = std::fs::read_to_string("/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/R_decpercent/proofs/R_decpercent.proof")?;
+    let proof = std::fs::read_to_string("privatevotingzkproofs/R_decpercent/proofs/R_decpercent.proof")?;
 
     // println!("{}",proof);
 
@@ -101,9 +99,14 @@ async fn decrypt_tally_helper(data: Json<TallyInfo>)-> Result<String,Error>{
 }
 
 async fn get_encrypted_votes(data: &Json<TallyInfo>) -> Result<((PointProjective,PointProjective),(PointProjective,PointProjective),(PointProjective,PointProjective)),Error> {
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    abigen!(
+        Gov,
+        "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
+
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     let (for_arr, against_arr, abstain_arr) = contract.get_proposal_votes_all(
         U256::from(data.id.clone()),
@@ -125,11 +128,14 @@ async fn decrypt_tally_onchain(
     percents: Vec<u32>,
     proof_str: String
     ) -> Result<String,Error> {
-
+    abigen!(
+        Gov,
+        "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
     println!("Decrypting tally on chain");
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     let for_percent = <[u8; 32]>::from_hex(&pad_hex(&format!("{:x}",percents[0]))[2..])?;
     let against_percent = <[u8; 32]>::from_hex(&pad_hex(&format!("{:x}",percents[1]))[2..])?;

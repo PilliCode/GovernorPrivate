@@ -5,10 +5,12 @@ use std::sync::Arc;
 use hex::{FromHex, encode};
 use ark_crypto_primitives::Error;
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, U256},
     providers::{Http, Provider},
 };
+//use ethers_contract_abigen::Abigen;
+
 use poseidon_rs::{Fr, Poseidon};
 use ff::PrimeField;
 use crate::constants::GOV_ADDRESS;
@@ -25,10 +27,6 @@ pub struct StartInfo {
     id: u128,
 }
 
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
 
 #[post("/election_start", format = "json", data = "<data>")]
 pub async fn election_start_call(data: Json<StartInfo>) -> &'static str {
@@ -63,11 +61,14 @@ async fn election_start_onchain(
     data: Json<StartInfo>,
     rt: String
     ) -> Result<String,Error> {
-
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
     println!("Setting up election on chain");
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
     println!("{:?}",contract.election_start(
         U256::from(data.id), 

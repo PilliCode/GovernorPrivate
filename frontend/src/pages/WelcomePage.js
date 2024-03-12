@@ -237,6 +237,16 @@ export default function WelcomePage() {
               blockchain
             </div>
           </HStack>
+          <HStack
+            marginLeft={"4vw"}
+            marginTop={"1vh"}
+            marginRight={"4vh"}
+            textAlign={"start"}
+          >
+            <div>
+              Some of the steps will take around a minute and a half to complete. The backend is generating zero knowledge proofs and setting up the all of the demo accounts. Unless an error pops up it is likely working just give it some time to finish!
+            </div>
+          </HStack>
           <Center>
             <Button
               marginTop={"4vh"}

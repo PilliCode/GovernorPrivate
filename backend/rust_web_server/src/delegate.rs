@@ -16,11 +16,13 @@ use rand::rngs::OsRng;
 use ark_crypto_primitives::Error;
 use std::sync::Arc;
 use ethers::{
-    contract::abigen,
+        contract::{Abigen,abigen},
     core::types::{Address, Filter, U256},
     providers::{Http, Provider},
     utils::format_units,
 };
+//use ethers_contract_abigen::Abigen;
+
 use std::io::Write;
 use toml;
 use poseidon_rs::Fr;
@@ -39,11 +41,6 @@ pub struct Delegate {
     delegate_addr: String,
     anoymity_size: u128,
 }
-
-abigen!(
-    GOV,
-    "/Users/pillicruz-dejesus/gov_private_bravo/gov_foundry/out/GovernorBravoDelegate.sol/GovernorBravoDelegate.json";
-);
 
 #[options("/delegate")]
 pub fn options_delegate() -> &'static str {
@@ -126,7 +123,7 @@ async fn delegate_helper(data: Json<Delegate>)-> Result<String,Error>{
     };
 
     /* define path based on anonymity size */
-    let mut path = "/Users/pillicruz-dejesus/gov_private_bravo/privatevotingzkproofs-main/".to_string();
+    let mut path = "privatevotingzkproofs/".to_string();
     if anonymity_size == 20 {path = path + "r_delvecadd";}
     else if anonymity_size == 10 {path = path + "R_del10";}
     else if anonymity_size == 5 {path = path + "R_del5";}
@@ -171,10 +168,13 @@ async fn delegate_onchain(
     res_vec: Vec<[String; 4]>, 
     shuffled_indices: Vec<U256>,
     proof_str: String) -> Result<bool,Error> {
-
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    
+    abigen!(
+        Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
+    );
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
-    let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
+    let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     
     let ct_2_onchain = transform_ct_arr(ct_2_vec)?;    
     let rand_onchain = transform_rand(rand_vec)?;
@@ -217,7 +217,9 @@ async fn delegate_onchain(
 /* get all token transfer balance create lt, use this to get merkle root, merkle path, and user index in merkle tree*/ 
 async fn get_rt(user_addr: String) -> Result<(poseidon_rs::Fr, Vec<poseidon_rs::Fr>, u32),Error> {
     /* setup connection to onchain contract and get transfer logs */
-    let provider = Provider::<Http>::try_from("http://localhost:8545")?;
+    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+
     let client = Arc::new(provider);
     let filter = Filter::new()
         .address(TOKEN_CONTRACT_ADDRESS.parse::<Address>()?)
