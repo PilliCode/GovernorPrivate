@@ -14,16 +14,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ENTRYPOINT ["nargo"]
 
 # install rust
-# RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
 
 # RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --help
-# ENV PATH="/root/.cargo/bin:${PATH}"
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Confirm Rust installation
-# RUN cargo install --git https://github.com/foundry-rs/foundry --profile local --locked forge cast chisel anvil
+RUN cargo install --git https://github.com/foundry-rs/foundry --profile local --locked forge cast chisel anvil
 
 # RUN curl -L https://foundry.paradigm.xyz | bash
-FROM ghcr.io/foundry-rs/foundry
 
 WORKDIR /app
 COPY gov_foundry/ ./gov_foundry
