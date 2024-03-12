@@ -5,11 +5,9 @@ use dep::std::ec::consts::te::baby_jubjub;
 use dep::std::ec::tecurve::affine::{Curve, Point};
 use dep::std::field;
 
-// potential speedup if we hardcode max path_len to constant 20
 fn custom_compute_merkle_root(leaf: Field, index: Field, hash_path: [Field; 20]) -> Field {
     // first, ascertain the working length of the path.
 
-    //let n = hash_path.len();
     let n = 20;
     let index_bits = index.to_le_bits(n as u32);
     let mut current = leaf;
@@ -36,7 +34,6 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
     }
 
     // do add-n-double on scalar bits and point
-    //let mut tmp_p = Point::new(point.x, point.y);
     let mut tmp_p = Point::zero();
     assert(bjj_curve.curve.contains(point)); // verify one summand on curve
 
@@ -49,9 +46,7 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
 
             tmp_p = t;
         }
-    }
-    //assert(res.eq(tmp_p));
-    tmp_p
+    }    tmp_p
 }
 
 fn main(
@@ -59,11 +54,11 @@ fn main(
     t_v: Field,
     pk_enc_x: pub Field,
     pk_enc_y: pub Field,
-    cts: pub [Field; 5 * 4], // (size of anonymity set) * (4 elements per ciphertext in format e_x, e_y, v_x, v_y)
+    cts: pub [Field; 5 * 4],            // (size of anonymity set) * (4 elements per ciphertext in format e_x, e_y, v_x, v_y)
     ct_random_states: pub [Field; 5],
-    delegates: pub [Field; 5], // fixed length, padded with 0s These are delegate addresses (the anonymity set) in the same order as the cts
+    delegates: pub [Field; 5],          // fixed length, padded with 0s These are delegate addresses (the anonymity set) in the same order as the cts
     vote_root: pub Field,
-    vote_hashpath: pub [Field; 20], // padded w/ zeros
+    vote_hashpath: pub [Field; 20],     // padded w/ zeros
     vote_idx: pub Field,
     // vecadd stuff
     summand: pub [Field; 5 * 4],
@@ -76,9 +71,7 @@ fn main(
     let bjj_curve = baby_jubjub();
     let pk = Point::new(pk_enc_x, pk_enc_y);
 
-    // what if the delegate address specified in the proof is not in the anonymity set?
     for i in 0..5 {
-        // NOTE: for testing, do NOT use delegate address = 0
         if delegates[i] != 0 {
             // if it isn't padding.
             let mut target = 0; // if it isn't the delegate, make sure it's the encryption of 0
@@ -93,7 +86,6 @@ fn main(
 
             let w = bjj_curve.curve.mul(ct_random_states[i], pk);
 
-            //let g_m = bjj_curve.curve.mul(target, bjj_curve.base8);
             let g_m = custom_compute_mult(target, bjj_curve.base8);
 
             let e = bjj_curve.curve.add(w, g_m);
@@ -111,6 +103,5 @@ fn main(
             assert(bjj_curve.curve.add(c_e, e2).eq(e_res));
             assert(bjj_curve.curve.add(c_v, v2).eq(v_res));
         }
-        // assert if summand and sum is 0'd out if delegate is 0?
     }
 }

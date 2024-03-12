@@ -9,13 +9,11 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
     let mut scalar_as_bits: [u1; 254] = [0; 254];
     let tmp = scalar.to_be_bits(crate::field::modulus_num_bits() as u32);
 
-    // 251 instead of 0?
     for i in 221..254 {
         scalar_as_bits[i] = tmp[i];
     }
 
     // do add-n-double on scalar bits and point
-    //let mut tmp_p = Point::new(point.x, point.y);
     let mut tmp_p = Point::zero();
     assert(bjj_curve.curve.contains(point)); // verify one summand on curve
 
@@ -29,7 +27,6 @@ fn custom_compute_mult(scalar: Field, point: Point) -> Point {
             tmp_p = t;
         }
     }
-    //assert(res.eq(tmp_p));
     tmp_p
 }
 

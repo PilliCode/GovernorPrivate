@@ -111,7 +111,6 @@ pub fn verbose_multiply(p: Point, scalar: BigInt) {
 
             let cur_bit = (byte >> (7-bit_idx)) & 1;
 
-            // can also double with q.projective().add(q)...
             // double the point
             q = q.mul_scalar(&BigInt::from_bytes_be(Sign::Plus, &2_u32.to_be_bytes()));
             
@@ -119,62 +118,12 @@ pub fn verbose_multiply(p: Point, scalar: BigInt) {
                 print_point(&p, "p");
                 print_point(&q, "cur");
 
-                // let x1 = p.x;
-                // let y1 = p.y;
-                // let x2 = q.x;
-                // let y2 = q.y;
-
                 print_point(&p, "p");
                 print_point(&q, "q1");
                 // p + q = q
                 q = p.projective().add(&q.projective()).affine();
 
                 print_point(&q, "q2");
-                // let x3 = q.x;
-                // let y3 = q.y;
-                
-                // // left = (x1 - x2) * (y2 + y3)
-                // let mut left = x1.clone();
-                // left.sub_assign(&x2);
-                // let mut rr = y2.clone();
-                // rr.add_assign(&y3);
-                // left.mul_assign(&rr);
-                // println!("left: {}", left.to_string());
-
-                // // right = (x2 - x3) * (y1 -  y2)
-                // let mut right = x2.clone();
-                // right.sub_assign(&x3);
-                // let mut rr_2 = y1.clone();
-                // rr_2.sub_assign(&y2);
-                // right.mul_assign(&rr_2);
-                // println!("right: {}", right.to_string());
-
-                // left = (y2 - y1) * 1/(x2 - x1)
-                // let mut left = y2.clone();
-                // left.sub_assign(&y1);
-                // let mut d1 = x2.clone();
-                // d1.sub_assign(&x1);
-                // d1 = d1.inverse().unwrap();
-                // left.mul_assign(&d1);
-                // println!("left: {}", left.to_string());
-
-                // // right = (-y3 - y2) * 1/(x3 - x2)
-                // let mut right = y3.clone();
-                // right.negate();
-                // right.sub_assign(&y2);
-                // let mut d2 = x3.clone();
-                // d2.sub_assign(&x2);
-                // d2 = d2.inverse().unwrap();
-                // right.mul_assign(&d2);
-                // println!("right: {}", right.to_string());
-
-                // left = left.inverse().unwrap();
-                // println!("inv: {}", left.to_string());
-
-                // right.inverse().unwrap();
-                // left.mul_assign(&right);
-                // println!("multiple: {}", left.to_string());
-
                 print_point(&q, "res");
                 //print_point(&q, "q")
                 hint_str.push_str(&format!("\"{}\", ", point_x_str(&q)));
@@ -238,8 +187,6 @@ pub fn rerandomize(pk: &Point, c: &(PointProjective, PointProjective), r: &BigIn
 
   let (e, v) = c;
   //let r = gen_rand_bigint();
-  //println!("r: {}", r.to_string());
-
 
   let g_r = B8.mul_scalar(&r).projective();
   let pk_r = pk.mul_scalar(&r).projective();
@@ -320,8 +267,6 @@ pub fn add_encryptions(cs: &Vec<(PointProjective, PointProjective)>) -> (PointPr
   for (e,v) in cs.iter().skip(1) {
     e_sum = e_sum.add(&e);
     v_sum = v_sum.add(&v);
-    // flip the y coordinate to subtract (-y)
-    // a negative number is a number close to p (p-1 is -1 when the field is mod p)
   }
   return (e_sum, v_sum);
 }
