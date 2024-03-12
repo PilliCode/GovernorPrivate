@@ -80,7 +80,7 @@
             align-items:baseline
         }
         #nounsproposals #proposalstack #proposalspacer{
-            width: 12vw;
+            width: 10vw;
         }
         #nounsproposals #proposalstack p{
             /* margin-left: 7vw; */
@@ -91,11 +91,24 @@
             color:green;
         }
         #nounsproposals #proposalstack #votesagainst{
-            margin-left: 9vw;
+            margin-left: 6.5vw;
             color:red;
         }
         #nounsproposals #proposalstack #votestotal{
-            margin-left: 9vw;
+            margin-left: 7.5vw;
             /* color:red; */
         }
+        #nounsproposals #proposalstack #votesfor0{
+            margin-left: 1vw;
+            color:green;
+        }
+        #nounsproposals #proposalstack #votesagainst0{
+            margin-left: 7.5vw;
+            color:red;
+        }
+        #nounsproposals #proposalstack #votestotal0{
+            margin-left: 8.5vw;
+            /* color:red; */
+        }
+     
 

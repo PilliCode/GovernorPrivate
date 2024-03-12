@@ -62,9 +62,20 @@ import { useEffect } from "react";
 import { DecryptTally, ElectionStartReq, VoteReq } from "../util/requests";
 import { Bar, BarChart, XAxis, YAxis, Tooltip } from "recharts";
 
-const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div id="custom-tip">
+        <p className="recharts-tooltip-label">{label} votes</p>
+        <p className="recharts-tooltip-item">{`${payload[0].name} : ${payload[0].value}%`}</p>
+      </div>
+    );
+  } return null;
+};
 
 export function Proposal() {
   const { proposalId } = useParams();
@@ -515,7 +526,7 @@ export function Proposal() {
       return (
         <Card alignItems={"start"}>
           <CardHeader>
-            {proposalStatus == "Succeeded" ? (
+            {proposalStatus == "Succeeded" || proposalStatus == "Defeated" || proposalStatus == "Executed" ? (
               <h1 id="cardheader">Decrypted Overview</h1>
             ) : (
               <h1 id="cardheader">Encrypted Overview</h1>
@@ -534,7 +545,7 @@ export function Proposal() {
     return (
       <Card alignItems={"start"}>
         <CardHeader width={"38vw"}>
-          {proposalStatus == "Succeeded" || proposalStatus == "Executed" ? (
+        {proposalStatus == "Succeeded" || proposalStatus == "Defeated" || proposalStatus == "Executed" ? (
             <>
               <h1 id="cardheader">Decrypted Overview</h1>
               <p>Votes shown are the true decrypted tally percentages</p>
@@ -659,8 +670,12 @@ export function Proposal() {
         <VStack width={"38vw"}>
           <BarChart width={300} height={500} data={votes}>
             <XAxis dataKey="name" />
-            <Tooltip />
-
+            {proposalStatus == "Pending" || proposalStatus == "Awaiting init" || proposalStatus == "Active" || proposalStatus == "Awaiting decrypt" ? 
+            (            
+              <Tooltip/>
+            ) : (            
+              <Tooltip content={<CustomTooltip />} />
+            )}
             <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         </VStack>
@@ -668,6 +683,7 @@ export function Proposal() {
       //   </Card>
     );
   }
+  
   function StatusCard() {
     return (
       <Card alignItems={"start"} width={"19.5vw"}>
@@ -685,6 +701,7 @@ export function Proposal() {
       </Card>
     );
   }
+  
 }
 
 

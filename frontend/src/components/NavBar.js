@@ -5,7 +5,7 @@ export default function NavBar(){
     return(
       <div id="navbar">
         <ul class="navigation">
-          <li><a id="headbargov" href='/'>Governor Private Bravo</a></li>
+          <li><a id="headbargov" href='/'>Instructions</a></li>
           <li>
             <InputGroup id="search">
               <InputLeftElement pointerEvents='none'>

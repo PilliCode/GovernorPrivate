@@ -1,0 +1,39 @@
+# Trusted Auth
+FROM rust:1.71.0 as trusted_auth
+
+# Set the working directory for the backend
+WORKDIR /app/trusted_auth/rust_web_server
+
+# Copy the Cargo.toml and Cargo.lock files
+COPY trusted_auth/rust_web_server/Cargo.toml trusted_auth/rust_web_server/Cargo.lock ./
+
+# Copy the rest of the backend code
+COPY trusted_auth/rust_web_server/src ./src
+
+# Build the backend
+RUN cargo build --release
+
+# Start a new stage for the final image
+FROM debian:bullseye
+
+WORKDIR /app
+
+SHELL ["/bin/bash", "-c"]
+RUN apt update && apt install -y curl bash git tar gzip libc++-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+RUN curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+ENV PATH="/root/.nargo/bin:$PATH"
+RUN noirup
+COPY privatevotingzkproofs-main ./privatevotingzkproofs
+
+COPY --from=trusted_auth /app/trusted_auth/rust_web_server/target/release/rust_web_server /app/trusted_auth
+
+# Expose the port your backend is listening on
+EXPOSE 9999
+
+# Command to run the trusted auth
+CMD ["./trusted_auth"]

@@ -58,3 +58,12 @@
     margin-bottom: 2vh;
     text-align: center;
 }
+#custom-tip{
+    color: black;
+    /* font-weight: bold; */
+    background-color: white;
+    opacity: 80%;
+    width: 8vw;
+    height: 6vh;
+
+}

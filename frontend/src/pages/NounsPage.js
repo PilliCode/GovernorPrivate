@@ -57,7 +57,7 @@ import {
 } from "../util/requests";
 import { useEffect } from "react";
 
-const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 var Comp = new ethers.Contract(
@@ -68,6 +68,8 @@ var Comp = new ethers.Contract(
 
 export default function NounsPage() {
   const navigate = useNavigate();
+  const [proposalsPassed, setProposalsPassed] = useState(0);
+  const [proposalsFailed, setProposalsFailed] = useState(0);
   const [proposals, setProposals] = useState([]);
   const [delegated, setDelegated] = useState(false);
   const [delegateStatus, setDelegateStatus] = useState(false);
@@ -804,7 +806,7 @@ export default function NounsPage() {
             <HStack id="description" spacing="10px">
               <p>
                 Nouns are an experimental attempt to improve the formation of
-                on-chain avatar communities.
+                on-chain avatar communities. We just upgraded their delegation to be private.
               </p>
             </HStack>
             <HStack id="tags" spacing="10px">
@@ -812,10 +814,10 @@ export default function NounsPage() {
                 Ethereum
               </Tag>
               <Tag size="lg" colorScheme="purple" borderRadius="full">
-                ERC721
+                ERC20
               </Tag>
               <Tag size="lg" colorScheme="purple" borderRadius="full">
-                814 Supply
+                Private Delegation
               </Tag>
             </HStack>
           </CardBody>
@@ -825,29 +827,29 @@ export default function NounsPage() {
         </Card>
         <Card id="nounsnumberscard">
           <HStack id="stack" spacing="10px">
-            <VStack id="col" spacing="0px">
-              <h1>356</h1>
+          <VStack id="col" spacing="0px">
+              <h1>{proposals.length}</h1>
               <p>Proposals</p>
             </VStack>
-            <VStack id="col" spacing="0px">
+            {/* <VStack id="col" spacing="0px">
               <h1>395</h1>
-              <p>Holders</p>
-            </VStack>
+              <p>Delegates</p>
+            </VStack> */}
             <VStack id="col" spacing="0px">
-              <h1>311</h1>
-              <p>Voters</p>
+              <h1>25</h1>
+              <p>Token Holders</p>
             </VStack>
           </HStack>
         </Card>
         <Card id="nounsproposals">
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
-              <HStack id="stack" spacing="10px">
+            <HStack id="stack" spacing="10px">
                 <h1>Proposals</h1>
                 <div id="spacing"></div>
-                <p>288</p>
+                <p>{proposalsPassed}</p>
                 <p id="passed">Passed</p>
-                <p>126</p>
+                <p>{proposalsFailed}</p>
                 <p id="failed">Failed</p>
               </HStack>
               <Flex id="firstflex">
@@ -855,7 +857,7 @@ export default function NounsPage() {
                 <Spacer />
                 <div id="proposal">Votes for</div>
                 <div id="proposal">Votes against</div>
-                <div id="proposal">Total votes</div>
+                <div id="proposal">Votes abstain </div>
               </Flex>
               <ProposalList></ProposalList>
               {/* <TemplateActive></TemplateActive>
@@ -906,11 +908,20 @@ export default function NounsPage() {
                   </HStack>
                 </VStack>
                 <HStack id="proposalspacer"></HStack>
-                <HStack>
-                  <p id="votesfor">0</p>
-                  <p id="votesagainst">0</p>
-                  <p id="votestotal">0</p>
-                </HStack>
+                {proposal.for === 0 && proposal.against === 0 && proposal.abstain === 0 ?(
+                 <HStack>
+                 <p id="votesfor0">{proposal.for}%</p>
+                 <p id="votesagainst0">{proposal.against}%</p>
+                 <p id="votestotal0">{proposal.abstain}%</p>
+               </HStack>
+                ):(                <HStack>
+                  <p id="votesfor">{proposal.for}%</p>
+                  <p id="votesagainst">{proposal.against}%</p>
+                  <p id="votestotal">{proposal.abstain}%</p>
+                </HStack>)}
+
+                
+                
               </HStack>
             </a>
             // <li key={index}>
@@ -924,44 +935,88 @@ export default function NounsPage() {
       </Stack>
     );
   }
-  async function getProposalStatus(proposalId) {
-    // if election has not been started ie election start emit doesnt exist
-    // this will make the status unstarted if unstarted then the button
-    // that should be rendered is Election start
-    let number = ethers.BigNumber.from(proposalId);
-    const data = Number(
-      await GovBravo.connect(provider.getSigner(defaultAccount)).state(number)
-    );
-    if (data == 0) return "Pending";
-    else if (data == 1) return "Awaiting init";
-    else if (data == 2) return "Active";
-    else if (data == 3) return "Awaiting decrypt";
-    else if (data == 4) return "Canceled";
-    else if (data == 5) return "Defeated";
-    else if (data == 6) return "Succeeded";
-    else if (data == 7) return "Queued";
-    else if (data == 8) return "Expired";
-    else if (data == 9) return "Executed";
-  }
+  
   async function getProposals() {
     const filter = GovBravo.filters.ElectionSetup();
     const logs = await GovBravo.queryFilter(filter);
     console.log(logs);
     let parsedProposals = [];
+    let passed = 0
+    let failed = 0
     for (const log of logs) {
       // Decode the log to get the event data
-      let status = await getProposalStatus(Number(log.args.id));
+      let id = Number(log.args.id)
+      let status = await getProposalStatus(id);
+      const dec_filter = GovBravo.filters.DecryptTally(id);
+      let dec_logs = await GovBravo.queryFilter(dec_filter);
       // Create an object from the outputs (assuming your event has 'value' and 'from' fields)
-      const parsedProposal = {
-        id: log.args.id.toString(),
-        proposer: log.args.proposer,
-        startBlock: log.args.startBlock.toString(),
-        endBlock: log.args.endBlock.toString(),
-        description: log.args.description,
-        title: log.args.title,
-        status: status,
-      };
+      let parsedProposal = {}
+      if (dec_logs.length > 0){
+        parsedProposal = {
+          id: log.args.id.toString(),
+          proposer: log.args.proposer,
+          startBlock: log.args.startBlock.toString(),
+          endBlock: log.args.endBlock.toString(),
+          description: log.args.description,
+          title: log.args.title,
+          status: status,
+          for: dec_logs[0].args.forVote/100,
+          against:  dec_logs[0].args.againstVote/100,
+          abstain: dec_logs[0].args.abstainVote/100
+        };
+      }else{
+         parsedProposal = {
+          id: log.args.id.toString(),
+          proposer: log.args.proposer,
+          startBlock: log.args.startBlock.toString(),
+          endBlock: log.args.endBlock.toString(),
+          description: log.args.description,
+          title: log.args.title,
+          status: status,
+          for: 0,
+          against:  0,
+          abstain: 0
+        };
+      }
       parsedProposals.push(parsedProposal);
+      async function getProposalStatus(proposalId) {
+        // if election has not been started ie election start emit doesnt exist
+        // this will make the status unstarted if unstarted then the button
+        // that should be rendered is Election start
+        let number = ethers.BigNumber.from(proposalId);
+        const data = Number(
+          await GovBravo.connect(provider.getSigner(defaultAccount)).state(number)
+        );
+        console.log(data)
+        if (data == 0) return "Pending";
+        else if (data == 1) return "Awaiting init";
+        else if (data == 2) return "Active";
+        else if (data == 3) return "Awaiting decrypt";
+        else if (data == 4) {
+          failed = failed+1
+          return "Canceled";
+        }
+        else if (data == 5) {
+          failed = failed+1
+          return "Defeated";
+        }
+        else if (data == 6) {
+          passed = passed + 1
+          return "Succeeded";
+        } 
+        else if (data == 7) {
+          passed = passed + 1
+          return "Queued";
+        } 
+        else if (data == 8) {
+          failed = failed+1
+          return "Expired";
+        }
+        else if (data == 9) {
+          passed = passed + 1
+          return "Executed";
+        } 
+      }
     }
 
     // const finalProps = parsedProposals.map((product) => ({
@@ -970,6 +1025,10 @@ export default function NounsPage() {
     // }));
 
     setProposals(parsedProposals);
+    setProposalsPassed(passed)
+    setProposalsFailed(failed)
     // loop through emit logs and get the most recent nouns prposals add them to the UI
   }
+
 }
+

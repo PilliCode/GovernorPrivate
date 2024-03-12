@@ -50,7 +50,7 @@ import {
 import { useState } from "react";
 import { ElectionSetup } from "../util/requests";
 
-const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:8545");
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 
 var Comp = new ethers.Contract(

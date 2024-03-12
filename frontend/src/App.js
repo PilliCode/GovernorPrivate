@@ -7,12 +7,14 @@ import NounsPage from './pages/NounsPage';
 import CreateProposal from './pages/CreateProposal';
 import ContractSetupPage from './pages/ContractSetupPage';
 import {Proposal} from './components/Proposal';
+import WelcomePage from './pages/WelcomePage';
 
 function App() {
   return (
     <div className="App">
       <Routes >
-        <Route path ="/" element={< ContractSetupPage/>} />
+        <Route path ="/" element={< WelcomePage/>} />
+        <Route path ="/setup" element={< ContractSetupPage/>} />
         <Route path ="/proposal-create" element={<CreateProposal/>} />
         <Route path ="/nouns" element={<NounsPage/>} />
         <Route path="/proposal/:proposalId" element={<Proposal/>} />

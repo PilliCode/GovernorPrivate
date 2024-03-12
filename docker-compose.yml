@@ -1,0 +1,48 @@
+
+# docker-compose.yml
+version: '3'
+services:
+  foundry:
+    build:
+      context: .
+      dockerfile: Dockerfile.foundry
+    ports:
+      - "8545:8545"
+    networks:
+      gov_private:
+  foundry_script:
+    build:
+      context: .
+      dockerfile: Dockerfile.foundry_script
+    depends_on:
+      - foundry
+    networks:
+      gov_private:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "9797:9797"
+    networks:
+      gov_private:
+
+  trusted:
+    build:
+      context: .
+      dockerfile: Dockerfile.trusted
+    ports:
+      - "9999:9999"
+    networks:
+      gov_private:
+  
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    networks:
+      gov_private:
+networks:
+  gov_private:
