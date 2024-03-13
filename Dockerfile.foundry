@@ -31,7 +31,7 @@ WORKDIR /app/gov_foundry
 
 EXPOSE 8545
 # FROM ghcr.io/foundry-rs/foundry
-RUN forge remappings
+RUN forge install foundry-rs/forge-std
 
 RUN forge build
 # CMD ["forge", "-h"]
