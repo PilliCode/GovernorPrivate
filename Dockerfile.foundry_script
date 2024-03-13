@@ -33,6 +33,7 @@ WORKDIR /app/gov_foundry
 # # FROM ghcr.io/foundry-rs/foundry
 # RUN forge remappings
 RUN forge install --no-git foundry-rs/forge-std 
+RUN forge install --no-git OpenZeppelin/openzeppelin-contracts
 
 RUN forge build
 
