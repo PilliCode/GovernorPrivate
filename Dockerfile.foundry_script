@@ -31,10 +31,11 @@ WORKDIR /app/gov_foundry
 
 # EXPOSE 8545
 # # FROM ghcr.io/foundry-rs/foundry
-RUN forge install foundry-rs/forge-std
 # RUN forge remappings
+RUN forge install --no-git foundry-rs/forge-std 
 
 RUN forge build
+
 ENTRYPOINT forge script script/Setup.s.sol:Setup --rpc-url http://foundry:8545 --broadcast --code-size-limit 30000
 
 # # CMD ["forge", "-h"]
