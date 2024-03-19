@@ -50,8 +50,8 @@ import { useState, useEffect } from "react";
 import { SetupDelegates, TrustedAuthSetup } from "../util/requests";
 // import { InitializeContract } from "../util/onchain";
 
-const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:8545");
-// const provider = new ethers.providers.JsonRpcProvider("http://0.0.0.0:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://foundry:8545");
+// const provider = new ethers.providers.JsonRpcProvider("http://foundry:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 
