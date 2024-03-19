@@ -62,7 +62,7 @@ import { useEffect } from "react";
 import { DecryptTally, ElectionStartReq, VoteReq } from "../util/requests";
 import { Bar, BarChart, XAxis, YAxis, Tooltip } from "recharts";
 
-const provider = new ethers.providers.JsonRpcProvider("http://foundry:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://10.112.63.196:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 

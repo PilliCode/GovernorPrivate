@@ -119,8 +119,8 @@ async fn vote_onchain(data: Json<Vote>, r_add: [[u8; 32]; 12], root: String, has
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());    
     let hash_path_onchain = transform_hash_path(hashpath)?;
@@ -176,7 +176,7 @@ async fn get_proposal_votes(data: &Json<Vote>) -> Result<(PointProjective,PointP
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
     // let provider = Provider::<Http>::try_from("http://:8545")?.with_sender(data.user_addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
@@ -192,8 +192,8 @@ async fn get_proposal_votes(data: &Json<Vote>) -> Result<(PointProjective,PointP
 
 async fn get_ld_snapshot(data: &Json<Vote>) -> Result<Vec<[String;4]>,Error>{
     // all we need is to get emit log from election_start and that will be our ct
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
 
     /* get election start log for this proposal because emitted cs is there */
@@ -224,7 +224,7 @@ async fn get_ld_snapshot(data: &Json<Vote>) -> Result<Vec<[String;4]>,Error>{
 
 
 async fn get_proof_ld(data: &Json<Vote>) -> Result<(Vec<Fr>,String,(PointProjective,PointProjective),u32),Error> {
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);    
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);    
     // let client = Arc::new(provider);
     // let contract = GOV::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     // let ld_vec = contract.get_ld().call().await?;

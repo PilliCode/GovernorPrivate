@@ -57,7 +57,7 @@ import {
 } from "../util/requests";
 import { useEffect } from "react";
 
-const provider = new ethers.providers.JsonRpcProvider("http://foundry:8545");
+const provider = new ethers.providers.JsonRpcProvider("http://10.112.63.196:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 var Comp = new ethers.Contract(

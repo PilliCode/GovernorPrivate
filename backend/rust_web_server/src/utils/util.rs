@@ -31,8 +31,8 @@ pub struct StoredCtVec {
 
 /* Check emit log to see if initialize was emitted*/
 pub async fn get_log_data() -> Result<(String,String),Error> {
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
 
     let filter = Filter::new()
@@ -92,8 +92,8 @@ pub async fn get_token_bal(addr: String) -> Result<u32,Error> {
     abigen!(
         TokenContract,"../../backend/rust_web_server/src/abi/PrivateToken.json";
     );
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = TokenContract::new(TOKEN_CONTRACT_ADDRESS.parse::<Address>()?, client.clone());
     let bal = contract.balance_of(addr.parse::<Address>()?).call().await?;
@@ -119,8 +119,8 @@ pub async fn get_ld()  -> Result<Vec<[[u8; 32]; 4]>,Error> {
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);    
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);    
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);    
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);    
     let client = Arc::new(provider);
     
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
@@ -134,8 +134,8 @@ pub async fn get_indexes() -> Result<HashMap<Address, U256>,Error> {
 
     let mut ld: HashMap<Address, U256> = HashMap::new();
     
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
     let client = Arc::new(provider);
     let filter = Filter::new()
         .address(GOV_ADDRESS.parse::<Address>()?)
@@ -156,8 +156,8 @@ pub async fn get_indexes() -> Result<HashMap<Address, U256>,Error> {
 
 /* gets the 4 currents cts for a given delegate */
 pub async fn get_ct(addr: &str) -> Result<(PointProjective,PointProjective),Error> {
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";

@@ -172,7 +172,7 @@ async fn delegate_onchain(
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     
@@ -217,8 +217,8 @@ async fn delegate_onchain(
 /* get all token transfer balance create lt, use this to get merkle root, merkle path, and user index in merkle tree*/ 
 async fn get_rt(user_addr: String) -> Result<(poseidon_rs::Fr, Vec<poseidon_rs::Fr>, u32),Error> {
     /* setup connection to onchain contract and get transfer logs */
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
 
     let client = Arc::new(provider);
     let filter = Filter::new()

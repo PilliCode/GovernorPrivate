@@ -74,8 +74,8 @@ async fn election_setup_onchain(
     /* Used the default key for the first account */
     let wallet: Wallet<SigningKey> = "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80".parse()?;    
     let wallet = wallet.with_chain_id(31337_u64);
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?;
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?;
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
     let client = Arc::new(SignerMiddleware::new(provider, wallet));
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 

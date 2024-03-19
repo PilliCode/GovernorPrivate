@@ -73,8 +73,8 @@ async fn deploy_governance(pk_x: String, pk_y: String, rt_str: String, rt_sig_st
         Timelock,
         "../../trusted_auth/rust_web_server/src/abi/Timelock.json";
     );
-    // let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://foundry:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
     println!("before timelock ");
 
