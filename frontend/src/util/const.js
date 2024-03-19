@@ -3,7 +3,7 @@
 export const backend_ip = "http://10.112.56.130:9797"
 // export const trusted_auth_ip = "http://127.0.0.1:9999"
 // export const trusted_auth_ip = "http://10.112.53.230:9999"
-export const trusted_auth_ip = "http://trusted:9999"
+export const trusted_auth_ip = "http://10.112.53.230:9999"
 export const timelock = "0x09635f643e140090a9a8dcd712ed6285858cebef"
 // export const token = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
 export const guardian = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
