@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container-init-pod
+spec:
+  containers:
+  - name: frontend
+    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v2
+    # Main application container configuration
+
+  - name: backend
+    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v2
+    # Additional container configuration
+  
+  - name: foundry_script
+    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
+    # Additional container configuration
+  
+  - name: trusted
+    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v2
+    # Additional container configuration
+  
+  initContainers:
+  - name: foundry
+    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v2
+    # Init container 1 configuration
