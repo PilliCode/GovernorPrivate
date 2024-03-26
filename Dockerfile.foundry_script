@@ -37,7 +37,7 @@ RUN forge install --no-git OpenZeppelin/openzeppelin-contracts
 
 RUN forge build
 
-ENTRYPOINT forge script script/Setup.s.sol:Setup --rpc-url http://foundry:8545 --broadcast --code-size-limit 30000
+ENTRYPOINT forge script script/Setup.s.sol:Setup --rpc-url http://localhost:8545 --broadcast --code-size-limit 30000
 
 # # CMD ["forge", "-h"]
 # ENTRYPOINT anvil --base-fee 0 --balance 1000000000000 --accounts 25 --code-size-limit 30000 --host 0.0.0.0
