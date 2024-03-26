@@ -20,16 +20,8 @@ spec:
     image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v2
     # Additional container configuration
 
-  initContainers:
-  - name: foundry-init
-    image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v2
-    # Init container 1 configuration
-
   - name: foundry-script
     image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
     # Init container 2 configuration
-    # Add lifecycle hook to wait for the foundry container
-    lifecycle:
-      postStart:
-        exec:
-          command: ["/bin/sh", "-c", "until nc -z localhost 8080; do sleep 1; done"]
+    command: ["/bin/sh", "-c", "until nc -z foundry 8080; do sleep 1; done; /path/to/script.sh"]
+    # Adjust the command to wait for the foundry container and execute the script
