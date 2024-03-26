@@ -18,7 +18,7 @@ use ethers::{
 //use ethers_contract_abigen::Abigen;
 
 
-use crate::constants::{DEFAULT_USER, GOV_ADDRESS};
+use crate::constants::{DEFAULT_USER, GOV_ADDRESS, FOUNDRY_IP};
 
 use crate::bjj_ah_elgamal;
 use crate::util::{get_ct, get_log_data, get_pk, get_token_bal};
@@ -138,8 +138,8 @@ async fn undelegate_onchain(
     let hex_token_bal = "0".repeat(zeros_needed) + &hex_bal.to_string();
 
 
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(addr.parse::<Address>()?);    
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?.with_sender(addr.parse::<Address>()?);    
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(addr.parse::<Address>()?);
 
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());

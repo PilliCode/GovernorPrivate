@@ -13,7 +13,7 @@ use ethers::{
 
 use poseidon_rs::{Fr, Poseidon};
 use ff::PrimeField;
-use crate::constants::GOV_ADDRESS;
+use crate::constants::{GOV_ADDRESS, FOUNDRY_IP};
 use crate::util::get_ld;
 
 use std::u128;
@@ -65,8 +65,8 @@ async fn election_start_onchain(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
     println!("Setting up election on chain");
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 

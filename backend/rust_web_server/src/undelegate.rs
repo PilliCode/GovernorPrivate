@@ -14,7 +14,7 @@ use ethers::{
 };
 //use ethers_contract_abigen::Abigen;
 
-use crate::constants::GOV_ADDRESS;
+use crate::constants::{GOV_ADDRESS, FOUNDRY_IP};
 use crate::util::{get_ld, read_from_file, strings_to_pointprojective, transform_vec_str_to_arr_u832, u832_to_pointprojective};
 use crate::bjj_ah_elgamal;
 use std::u128;
@@ -152,8 +152,8 @@ async fn undelegate_onchain(
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 

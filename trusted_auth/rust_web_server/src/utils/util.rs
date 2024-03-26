@@ -7,7 +7,7 @@ use ethers::{
 //use ethers_contract_abigen::Abigen;
 
 use std::{collections::HashMap, sync::Arc};
-use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS};
+use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS, FOUNDRY_IP};
 use ethers::abi::AbiEncode;
 use poseidon_rs::Fr;
 use babyjubjub_rs::{Point, PointProjective};
@@ -29,8 +29,8 @@ pub struct StoredSk {
 
 
 pub async fn get_log_data() -> Result<(String,String),Error> {
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
 
     // Check emit log to see if initialize was emitted
@@ -51,8 +51,8 @@ pub async fn get_rt() -> Result<(poseidon_rs::Fr, Vec<poseidon_rs::Fr>),Error> {
     let mut lt_addr_to_index: HashMap<Address, usize> = HashMap::new();
     let mut lt: HashMap<Address, U256> = HashMap::new();
 
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?;
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?;
     let client = Arc::new(provider);
     let filter = Filter::new()
         .address(TOKEN_CONTRACT_ADDRESS.parse::<Address>()?)

@@ -1,6 +1,7 @@
 pub const TIMELOCK_CONTRACT_ADDRESS:&str  = "0x09635f643e140090a9a8dcd712ed6285858cebef";
 pub const TOKEN_CONTRACT_ADDRESS:&str  = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 pub const GOV_ADDRESS:&str  = "0xc5a5c42992decbae36851359345fe25997f5c42d";
+pub const FOUNDRY_IP:&str  = "http://0.0.0.0:8545";
 
 // pub const TOKEN_CONTRACT_ADDRESS:&str  = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512";
 // // pub const GOV_ADDRESS:&str  = "0x0165878a594ca255338adfa4d48449f69242eb8f";

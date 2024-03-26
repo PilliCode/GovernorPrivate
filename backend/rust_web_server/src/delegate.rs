@@ -27,7 +27,7 @@ use std::io::Write;
 use toml;
 use poseidon_rs::Fr;
 use ff::PrimeField;
-use crate::constants::{GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS};
+use crate::constants::{GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS, FOUNDRY_IP};
 use crate::util::{get_indexes, get_ld, get_log_data, get_pk, get_token_bal, pad_hex, u832_to_pointprojective, write_to_file, StoredCtVec};
 use crate::bjj_ah_elgamal;
 use std::u128;
@@ -172,7 +172,7 @@ async fn delegate_onchain(
     abigen!(
         Gov,"../../backend/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
     
@@ -217,8 +217,8 @@ async fn delegate_onchain(
 /* get all token transfer balance create lt, use this to get merkle root, merkle path, and user index in merkle tree*/ 
 async fn get_rt(user_addr: String) -> Result<(poseidon_rs::Fr, Vec<poseidon_rs::Fr>, u32),Error> {
     /* setup connection to onchain contract and get transfer logs */
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?;
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?;
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?;
 
     let client = Arc::new(provider);
     let filter = Filter::new()

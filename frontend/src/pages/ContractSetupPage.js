@@ -9,6 +9,7 @@ import {
   defaultAccount,
   timelock,
   token,
+  foundry_ip,
 } from "../util/const";
 import {
   Alert,
@@ -50,8 +51,8 @@ import { useState, useEffect } from "react";
 import { SetupDelegates, TrustedAuthSetup } from "../util/requests";
 // import { InitializeContract } from "../util/onchain";
 
-const provider = new ethers.providers.JsonRpcProvider("http://10.112.63.196:8545");
-// const provider = new ethers.providers.JsonRpcProvider("http://10.112.63.196:8545");
+const provider = new ethers.providers.JsonRpcProvider(foundry_ip);
+// const provider = new ethers.providers.JsonRpcProvider("http://foundry:8545");
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 
@@ -167,7 +168,7 @@ export default function ContractSetupPage() {
           </HStack>
           <HStack marginLeft={"4vw"} marginTop={"2vh"}>
             <WarningIcon color boxSize={8} />
-            <div id="connectwallet">Token Address</div>
+            <div id="connectwallet">ERC20 Governance Token Address</div>
 
           </HStack>
           <HStack marginLeft={"4vw"} marginTop={"4vh"}>

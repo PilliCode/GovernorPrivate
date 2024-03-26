@@ -55,6 +55,7 @@ import {
   comp_contractAddress,
   contractAddress,
   defaultAccount,
+  foundry_ip,
 } from "../util/const";
 import { ethers } from "ethers";
 import { useEffect } from "react";
@@ -62,7 +63,7 @@ import { useEffect } from "react";
 import { DecryptTally, ElectionStartReq, VoteReq } from "../util/requests";
 import { Bar, BarChart, XAxis, YAxis, Tooltip } from "recharts";
 
-const provider = new ethers.providers.JsonRpcProvider("http://10.112.63.196:8545");
+const provider = new ethers.providers.JsonRpcProvider(foundry_ip);
 
 var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 

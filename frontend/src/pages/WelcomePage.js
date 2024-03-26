@@ -50,9 +50,9 @@ import { useState, useEffect } from "react";
 import { SetupDelegates, TrustedAuthSetup } from "../util/requests";
 // import { InitializeContract } from "../util/onchain";
 
-const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+// const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
+// var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ export default function WelcomePage() {
               voting on DAOs (Decentralized Autonamous Organizations). This
               governance structure is designed to bring representative democracy
               onto the blockchain. We outline our protocol in detail on our
-              website LINKLINKLINK.{" "}
+              website.{" "}
             </div>
           </HStack>
           <HStack marginLeft={"4vw"} marginTop={"2vh"}>

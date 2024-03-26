@@ -10,7 +10,7 @@ use ethers::{
 
 use std::{sync::Arc, time::SystemTime};
 use crate::utils::util::{get_rt, write_to_file, StoredSk}; // requires 'getrandom' feature
-use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS,TIMELOCK_CONTRACT_ADDRESS};
+use crate::utils::constants::{DEFAULT_USER, GOV_ADDRESS, TOKEN_CONTRACT_ADDRESS,TIMELOCK_CONTRACT_ADDRESS, FOUNDRY_IP};
 use hex::FromHex;
 use crate::bjj_ah_elgamal;
 use serde::Deserialize;
@@ -73,8 +73,8 @@ async fn deploy_governance(pk_x: String, pk_y: String, rt_str: String, rt_sig_st
         Timelock,
         "../../trusted_auth/rust_web_server/src/abi/Timelock.json";
     );
-    // let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    // let provider = Provider::<Http>::try_from("http://10.112.63.19:8545")?.with_sender(DEFAULT_USER.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(DEFAULT_USER.parse::<Address>()?);
     let client = Arc::new(provider);
     println!("before timelock ");
 

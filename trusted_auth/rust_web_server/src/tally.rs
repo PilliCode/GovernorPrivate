@@ -18,7 +18,7 @@ use ethers::{
 };
 //use ethers_contract_abigen::Abigen;
 
-use crate::utils::constants::GOV_ADDRESS;
+use crate::utils::constants::{GOV_ADDRESS, FOUNDRY_IP};
 use crate::utils::util::{get_log_data, pad_hex, read_from_file, u832_to_pointprojective, create_cts};
 use crate::bjj_ah_elgamal;
 
@@ -104,7 +104,7 @@ async fn get_encrypted_votes(data: &Json<TallyInfo>) -> Result<((PointProjective
         "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
 
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
@@ -133,7 +133,7 @@ async fn decrypt_tally_onchain(
         "../../trusted_auth/rust_web_server/src/abi/GovernorBravoDelegate.json";
     );
     println!("Decrypting tally on chain");
-    let provider = Provider::<Http>::try_from("http://10.112.63.196:8545")?.with_sender(data.user_addr.parse::<Address>()?);
+    let provider = Provider::<Http>::try_from(FOUNDRY_IP)?.with_sender(data.user_addr.parse::<Address>()?);
     let client = Arc::new(provider);
     let contract = Gov::new(GOV_ADDRESS.parse::<Address>()?, client.clone());
 
