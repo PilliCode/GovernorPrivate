@@ -39,16 +39,26 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: foundry-script-job
+  name: foundry-setup-job
 spec:
   template:
     spec:
       containers:
-      - name: foundry-script
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
-        # Init container 2 configuration
-        lifecycle:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "sleep 20"]  # Adjust the command to wait for the foundry container and execute the script
+      - name: foundry-setup-container
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
+        command:
+        - "kubectl"
+        - "exec"
+        - "multi-container-deployment-d5d644cd-9hrlz"
+        - "-c"
+        - "foundry"
+        - "--"
+        - "forge"
+        - "script"
+        - "script/Setup.s.sol:Setup"
+        - "--rpc-url"
+        - "http://0.0.0.0:8545"
+        - "--broadcast"
+        - "--code-size-limit"
+        - "30000"
       restartPolicy: Never
