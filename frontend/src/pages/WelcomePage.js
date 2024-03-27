@@ -2,14 +2,6 @@ import * as React from "react";
 import NavBar from "../components/NavBar";
 import "./WelcomePage.css";
 import "./ContractSetupPage.css";
-import { ethers } from "ethers";
-import {
-  contractAddress,
-  abi,
-  defaultAccount,
-  timelock,
-  token,
-} from "../util/const";
 import {
   Alert,
   AlertDescription,
@@ -44,32 +36,8 @@ import {
   WarningIcon,
   WarningTwoIcon,
 } from "@chakra-ui/icons";
-import { useNavigate } from "react-router-dom";
-import { EmojiPeople } from "@mui/icons-material";
-import { useState, useEffect } from "react";
-import { SetupDelegates, TrustedAuthSetup } from "../util/requests";
-// import { InitializeContract } from "../util/onchain";
-
-// const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
-
-// var GovBravo = new ethers.Contract(contractAddress, abi, provider.getSigner());
 
 export default function WelcomePage() {
-  const navigate = useNavigate();
-  const [data, setData] = useState(null);
-  const [keys, setKeys] = useState(null);
-
-  const [daoName, setDAOName] = useState(""); // State to store input value
-  const handleDAONameChange = (event) => {
-    setDAOName(event.target.value);
-  };
-  const [loading, setLoading] = useState(false); // State to store input value
-
-  const [tokenAddr, setTokenAddr] = useState(""); // State to store input value
-  const handleTokenAddrChange = (event) => {
-    setTokenAddr(event.target.value);
-  };
-
   return (
     <div className="defaultbackground">
       <NavBar />
