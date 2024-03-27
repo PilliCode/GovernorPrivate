@@ -28,10 +28,27 @@ spec:
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v3
         # Additional container configuration
 
+      # - name: foundry-script
+      #   image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v3
+      #   # Init container 2 configuration
+      #   lifecycle:
+      #     postStart:
+      #       exec:
+      #         command: ["/bin/sh", "-c", "sleep 5"]              # Adjust the command to wait for the foundry container and execute the script
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: foundry-script-job
+spec:
+  template:
+    spec:
+      containers:
       - name: foundry-script
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v3
         # Init container 2 configuration
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "sleep 5"]              # Adjust the command to wait for the foundry container and execute the script
+              command: ["/bin/sh", "-c", "sleep 5"]  # Adjust the command to wait for the foundry container and execute the script
+      restartPolicy: Never
