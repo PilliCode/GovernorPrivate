@@ -32,5 +32,5 @@ spec:
       - name: foundry-script
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
         # Init container 2 configuration
-        command: ["/bin/sh", "-c", "until nc -z foundry 8080; do sleep 1; done; /path/to/script.sh"]
+        # command: ["/bin/sh", "-c", "until nc -z foundry 8545; do sleep 1; done; /path/to/script.sh"]
         # Adjust the command to wait for the foundry container and execute the script
