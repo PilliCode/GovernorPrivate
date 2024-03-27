@@ -40,6 +40,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
   const navigate = useNavigate();
+  console.log("Test if updated")
   return (
     <div className="defaultbackground">
       <NavBar />
