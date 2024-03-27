@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: foundry-script
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v3
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
         # Init container 2 configuration
         lifecycle:
           postStart:
