@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: multi-container-deployment
 spec:
-  replicas: 1  # Number of replicas you want to run
+  replicas: 1
   selector:
     matchLabels:
       app: multi-container-init-pod
@@ -24,6 +24,12 @@ spec:
       - name: foundry
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v2
         # Foundry container configuration
+        readinessProbe:  # Add a readiness probe to indicate when foundry is ready
+          httpGet:
+            path: /health  # Adjust this path based on your application
+            port: 8545
+          initialDelaySeconds: 5
+          periodSeconds: 5
 
       - name: trusted
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v3
@@ -32,5 +38,8 @@ spec:
       - name: foundry-script
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v2
         # Init container 2 configuration
-        # command: ["/bin/sh", "-c", "until nc -z foundry 8545; do sleep 1; done; /path/to/script.sh"]
-        # Adjust the command to wait for the foundry container and execute the script
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "until nc -z foundry 8545; do sleep 1; done; /path/to/script.sh"]
+              # Adjust the command to wait for the foundry container and execute the script
