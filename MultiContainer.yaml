@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v6
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v7
         # Main application container configuration
 
       - name: backend
