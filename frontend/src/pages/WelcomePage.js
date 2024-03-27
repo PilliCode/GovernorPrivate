@@ -36,8 +36,10 @@ import {
   WarningIcon,
   WarningTwoIcon,
 } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
+  const navigate = useNavigate();
   return (
     <div className="defaultbackground">
       <NavBar />
