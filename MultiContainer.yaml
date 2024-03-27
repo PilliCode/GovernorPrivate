@@ -50,5 +50,5 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "sleep 5"]  # Adjust the command to wait for the foundry container and execute the script
+              command: ["/bin/sh", "-c", "sleep 20"]  # Adjust the command to wait for the foundry container and execute the script
       restartPolicy: Never
