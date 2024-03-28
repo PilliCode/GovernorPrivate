@@ -47,6 +47,7 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
+  type: LoadBalancer
 
 ---
 apiVersion: v1
@@ -60,6 +61,7 @@ spec:
     - protocol: TCP
       port: 9797
       targetPort: 9797
+  type: LoadBalancer
 
 ---
 apiVersion: v1
@@ -73,6 +75,7 @@ spec:
     - protocol: TCP
       port: 8545
       targetPort: 8545
+  type: LoadBalancer
 
 ---
 apiVersion: v1
@@ -86,6 +89,7 @@ spec:
     - protocol: TCP
       port: 9999
       targetPort: 9999
+  type: LoadBalancer
 
 ---
 apiVersion: autoscaling/v1
