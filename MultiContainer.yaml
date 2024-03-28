@@ -36,7 +36,7 @@ spec:
         command:
           - "sh"
           - "-c"
-          - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url localhost:8545 --broadcast --code-size-limit 30000"
+          - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url http://127.0.0.1:8545 --broadcast --code-size-limit 30000"
         env:
         - name: FOUNDRY_POD_IP
           valueFrom:
