@@ -91,16 +91,16 @@ spec:
       targetPort: 9999
   type: LoadBalancer
 
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: multi-container-autoscaler
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: multi-container-deployment
-  minReplicas: 1  # Minimum number of replicas
-  maxReplicas: 3  # Maximum number of replicas
-  targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage
+# ---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: multi-container-autoscaler
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: multi-container-deployment
+#   minReplicas: 1  # Minimum number of replicas
+#   maxReplicas: 3  # Maximum number of replicas
+#   targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage
