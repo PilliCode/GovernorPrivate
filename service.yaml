@@ -8,18 +8,22 @@ spec:
     app: multi-container-init-pod
   ports:
     - protocol: TCP
-      port: 30000  # Port exposed externally for the frontend container
+      port: 3000  # Port exposed internally for the frontend container
       targetPort: 3000  # Port of the frontend container
       name: frontend-port
+      nodePort: 30000  # Port exposed externally for the frontend container
     - protocol: TCP
-      port: 30997  # Port exposed externally for the backend container
+      port: 9797  # Port exposed internally for the backend container
       targetPort: 9797  # Port of the backend container
       name: backend-port
+      nodePort: 30997  # Port exposed externally for the backend container
     - protocol: TCP
-      port: 31845  # Port exposed externally for the foundry container
+      port: 8545  # Port exposed internally for the foundry container
       targetPort: 8545  # Port of the foundry container
       name: foundry-port
+      nodePort: 31845  # Port exposed externally for the foundry container
     - protocol: TCP
-      port: 32999  # Port exposed externally for the trusted container
+      port: 9999  # Port exposed internally for the trusted container
       targetPort: 9999  # Port of the trusted container
       name: trusted-port 
+      nodePort: 32999  # Port exposed externally for the trusted container
