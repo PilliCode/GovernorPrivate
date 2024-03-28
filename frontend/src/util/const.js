@@ -1,7 +1,7 @@
 // export const backend_ip = "http://127.0.0.1:9797"
 // export const backend_ip = "http://10.112.56.130:9797"
 export const backend_ip = "http://0.0.0.0:9797"
-export const foundry_ip = "http://0.0.0.0.154:8545"
+export const foundry_ip = "http://0.0.0.0:8545"
 
 // export const trusted_auth_ip = "http://127.0.0.1:9999"
 // export const trusted_auth_ip = "http://10.112.53.230:9999"
