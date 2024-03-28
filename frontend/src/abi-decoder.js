@@ -15932,7 +15932,7 @@ var XHR2 = __webpack_require__(156); // jshint ignore: line
  * HttpProvider should be used to send rpc calls over http
  */
 var HttpProvider = function (host, timeout) {
-    this.host = host || 'http://10.112.60.169:8545';
+    this.host = host || 'http://0.0.0.0:8545';
     this.timeout = timeout || 0;
 };
 
