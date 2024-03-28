@@ -3,22 +3,23 @@ kind: Service
 metadata:
   name: multi-container-service
 spec:
+  type: NodePort  # Expose the service externally using NodePort
   selector:
     app: multi-container-init-pod
   ports:
     - protocol: TCP
-      port: 3000  # Port exposed by the service for the frontend container
+      port: 30000  # Port exposed externally for the frontend container
       targetPort: 3000  # Port of the frontend container
       name: frontend-port
     - protocol: TCP
-      port: 9797  # Port exposed by the service for the backend container
+      port: 30997  # Port exposed externally for the backend container
       targetPort: 9797  # Port of the backend container
       name: backend-port
     - protocol: TCP
-      port: 8545  # Port exposed by the service for the foundry container
+      port: 31845  # Port exposed externally for the foundry container
       targetPort: 8545  # Port of the foundry container
       name: foundry-port
     - protocol: TCP
-      port: 9999  # Port exposed by the service for the trusted container
+      port: 32999  # Port exposed externally for the trusted container
       targetPort: 9999  # Port of the trusted container
-      name: trusted-port
+      name: trusted-port 
