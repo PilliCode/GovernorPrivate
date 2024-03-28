@@ -1,12 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: multi-container-service
 spec:
   selector:
-    app: frontend
+    app: multi-container-init-pod
   ports:
     - protocol: TCP
-      port: 3000       # Service port
-      targetPort: 3000 # Target port of the Pods
-  type: NodePort
+      port: 3000  # Port exposed by the service for the frontend container
+      targetPort: 3000  # Port of the frontend container
+    - protocol: TCP
+      port: 9797  # Port exposed by the service for the backend container
+      targetPort: 9797  # Port of the backend container
+    - protocol: TCP
+      port: 8545  # Port exposed by the service for the foundry container
+      targetPort: 8545  # Port of the foundry container
+    - protocol: TCP
+      port: 9999  # Port exposed by the service for the trusted container
+      targetPort: 9999  # Port of the trusted container
