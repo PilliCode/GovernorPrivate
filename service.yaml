@@ -3,23 +3,95 @@ kind: Service
 metadata:
   name: multi-container-service
 spec:
-  type: NodePort  # Expose the service externally using NodePort
+  type: ClusterIP  # Use ClusterIP to expose services internally
   selector:
     app: multi-container-init-pod
   ports:
     - protocol: TCP
-      port: 3000  # Port exposed externally for the frontend container
+      port: 3000  # Port for the frontend container
       targetPort: 3000  # Port of the frontend container
       name: frontend-port
     - protocol: TCP
-      port: 9797  # Port exposed externally for the backend container
+      port: 9797  # Port for the backend container
       targetPort: 9797  # Port of the backend container
       name: backend-port
     - protocol: TCP
-      port: 8545  # Port exposed externally for the foundry container
+      port: 8545  # Port for the foundry container
       targetPort: 8545  # Port of the foundry container
       name: foundry-port
     - protocol: TCP
-      port: 9999  # Port exposed externally for the trusted container
+      port: 9999  # Port for the trusted container
       targetPort: 9999  # Port of the trusted container
-      name: trusted-port 
+      name: trusted-port
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+spec:
+  rules:
+    - host: http://0.0.0.0
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: multi-container-service
+                port:
+                  number: 3000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-ingress
+spec:
+  rules:
+    - host: http://0.0.0.0
+      http:
+        paths:
+          - path: /backend
+            pathType: Prefix
+            backend:
+              service:
+                name: multi-container-service
+                port:
+                  number: 9797
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: foundry-ingress
+spec:
+  rules:
+    - host: http://0.0.0.0
+      http:
+        paths:
+          - path: /foundry
+            pathType: Prefix
+            backend:
+              service:
+                name: multi-container-service
+                port:
+                  number: 8545
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: trusted-ingress
+spec:
+  rules:
+    - host: http://0.0.0.0
+      http:
+        paths:
+          - path: /trusted
+            pathType: Prefix
+            backend:
+              service:
+                name: multi-container-service
+                port:
+                  number: 9999
