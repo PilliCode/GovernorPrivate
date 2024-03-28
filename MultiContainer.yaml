@@ -55,7 +55,7 @@ spec:
         - "--"
         - "forge"
         - "script"
-        - "script/Setup.s.sol:Setup"
+        - "gov_foundry/script/Setup.s.sol:Setup"
         - "--rpc-url"
         - "http://0.0.0.0:8545"
         - "--broadcast"
