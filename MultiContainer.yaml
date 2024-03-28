@@ -5,10 +5,9 @@ metadata:
   labels:
     app: gov-pod
 spec:
-  # replicas: 1
-  # selector:
-  #   matchLabels:
-  #     app: multi-container-init-pod
+  selector:
+    matchLabels:
+      app: multi-container-init-pod
   template:
     metadata:
       labels:
