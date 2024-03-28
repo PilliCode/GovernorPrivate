@@ -45,6 +45,7 @@ spec:
     spec:
       containers:
       - name: foundry-setup-container
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
         command:
         - "kubectl"
         - "exec"
