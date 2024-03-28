@@ -9,12 +9,16 @@ spec:
     - protocol: TCP
       port: 3000  # Port exposed by the service for the frontend container
       targetPort: 3000  # Port of the frontend container
+      name: frontend-port
     - protocol: TCP
       port: 9797  # Port exposed by the service for the backend container
       targetPort: 9797  # Port of the backend container
+      name: backend-port
     - protocol: TCP
       port: 8545  # Port exposed by the service for the foundry container
       targetPort: 8545  # Port of the foundry container
+      name: foundry-port
     - protocol: TCP
       port: 9999  # Port exposed by the service for the trusted container
       targetPort: 9999  # Port of the trusted container
+      name: trusted-port
