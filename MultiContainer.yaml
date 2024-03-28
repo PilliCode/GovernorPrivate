@@ -1,66 +1,36 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Pod
 metadata:
-  name: multi-container-deployment
+  name: multi-container-init-pod
+  labels:
+    app: multi-container-init-pod
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: multi-container-init-pod
-  template:
-    metadata:
-      labels:
-        app: multi-container-init-pod
-    spec:
-      containers:
-      - name: frontend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v7
-        ports:
+  containers:
+    - name: frontend
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v7
+      ports:
         - containerPort: 3000
-        # Main application container configuration
-
-      - name: backend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v3
-        ports:
+    - name: backend
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v3
+      ports:
         - containerPort: 9797
-        # Additional container configuration
-      
-      - name: foundry
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
-        ports:
+    - name: foundry
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
+      ports:
         - containerPort: 8545
-
-      - name: trusted
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v3
-        ports:
+    - name: trusted
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v3
+      ports:
         - containerPort: 9999
-        # Additional container configuration
-
-      # - name: foundry-script
-      #   image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry_script:v3
-      #   # Init container 2 configuration
-      #   lifecycle:
-      #     postStart:
-      #       exec:
-      #         command: ["/bin/sh", "-c", "sleep 5"]              # Adjust the command to wait for the foundry container and execute the script
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: foundry-setup-job
-spec:
-  template:
-    spec:
-      containers:
-      - name: foundry-setup-container
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
-        command:
-          - "sh"
-          - "-c"
-          - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url http://34.94.211.113:8545 --broadcast --code-size-limit 30000"
-        env:
+  initContainers:
+    - name: foundry-setup-container
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
+      command:
+        - "sh"
+        - "-c"
+        - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url http://34.94.211.113:8545 --broadcast --code-size-limit 30000"
+      env:
         - name: FOUNDRY_POD_IP
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-      restartPolicy: Never
