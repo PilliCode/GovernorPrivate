@@ -15,17 +15,25 @@ spec:
       containers:
       - name: frontend
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v7
+        ports:
+        - containerPort: 3000
         # Main application container configuration
 
       - name: backend
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v3
+        ports:
+        - containerPort: 9797
         # Additional container configuration
       
       - name: foundry
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
+        ports:
+        - containerPort: 8545
 
       - name: trusted
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v3
+        ports:
+        - containerPort: 9999
         # Additional container configuration
 
       # - name: foundry-script
@@ -49,5 +57,5 @@ spec:
         command:
           - "sh"
           - "-c"
-          - "sleep 10 && forge script script/Setup.s.sol:Setup --rpc-url http://foundry:8545 --broadcast --code-size-limit 30000"
+          - "sleep 10 && forge script script/Setup.s.sol:Setup --rpc-url http://0.0.0.0:8545 --broadcast --code-size-limit 30000"
       restartPolicy: Never
