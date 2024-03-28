@@ -45,7 +45,6 @@ spec:
     spec:
       containers:
       - name: foundry-setup-container
-        image: foundry
         command:
         - "kubectl"
         - "exec"
