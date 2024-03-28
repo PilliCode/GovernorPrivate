@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: frontend
-      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v7
+      image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v8
       ports:
         - containerPort: 3000
     - name: backend
@@ -23,23 +23,23 @@ spec:
       ports:
         - containerPort: 9999
 ---
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: foundry-setup-job
-spec:
-  template:
-    spec:
-      containers:
-      - name: foundry-setup-container
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
-        command:
-          - "sh"
-          - "-c"
-          - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url http://foundry.default.svc.cluster.local:8545 --broadcast --code-size-limit 30000"
-        env:
-        - name: FOUNDRY_POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-      restartPolicy: Never
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: foundry-setup-job
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - name: foundry-setup-container
+#         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v3
+#         command:
+#           - "sh"
+#           - "-c"
+#           - "sleep 10 && forge script gov_foundry/script/Setup.s.sol:Setup --rpc-url http://127.0.0.1:8545 --broadcast --code-size-limit 30000"
+#         env:
+#         - name: FOUNDRY_POD_IP
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: status.podIP
+#       restartPolicy: Never
