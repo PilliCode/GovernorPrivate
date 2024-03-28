@@ -35,57 +35,57 @@ spec:
         ports:
         - containerPort: 9999
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: frontend-service
-# spec:
-#   selector:
-#     app: multi-container-init-pod
-#   ports:
-#     - protocol: TCP
-#       port: 3000
-#       targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: multi-container-init-pod
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: backend-service
-# spec:
-#   selector:
-#     app: multi-container-init-pod
-#   ports:
-#     - protocol: TCP
-#       port: 9797
-#       targetPort: 9797
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: multi-container-init-pod
+  ports:
+    - protocol: TCP
+      port: 9797
+      targetPort: 9797
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: foundry-service
-# spec:
-#   selector:
-#     app: multi-container-init-pod
-#   ports:
-#     - protocol: TCP
-#       port: 8545
-#       targetPort: 8545
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: foundry-service
+spec:
+  selector:
+    app: multi-container-init-pod
+  ports:
+    - protocol: TCP
+      port: 8545
+      targetPort: 8545
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: trusted-service
-# spec:
-#   selector:
-#     app: multi-container-init-pod
-#   ports:
-#     - protocol: TCP
-#       port: 9999
-#       targetPort: 9999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trusted-service
+spec:
+  selector:
+    app: multi-container-init-pod
+  ports:
+    - protocol: TCP
+      port: 9999
+      targetPort: 9999
 
 ---
 apiVersion: autoscaling/v1
