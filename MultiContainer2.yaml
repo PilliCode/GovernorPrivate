@@ -20,23 +20,34 @@ spec:
         ports:
         - containerPort: 3000
         # Main application container configuration
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 
       - name: backend
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
         ports:
         - containerPort: 9797
         # Additional container configuration
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
       
       - name: foundry
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
         ports:
         - containerPort: 8545
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 
       - name: trusted
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
         ports:
         - containerPort: 9999
-
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 ---
 apiVersion: v1
 kind: Service
@@ -58,51 +69,113 @@ metadata:
   name: backend-service2
 spec:
   selector:
-    app: multi-container-init-pod-2
-  ports:
-    - protocol: TCP
-      port: 9797
-      targetPort: 9797
-  type: LoadBalancer
+    app: multi-co
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: foundry-service2
-spec:
-  selector:
-    app: multi-container-init-pod-2
-  ports:
-    - protocol: TCP
-      port: 8545
-      targetPort: 8545
-  type: LoadBalancer
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: multi-container-deployment-2
+#   labels:
+#     app: multi-container-init-pod-2
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: multi-container-init-pod-2
+#   template:
+#     metadata:
+#       labels:
+#         app: multi-container-init-pod-2
+#     spec:
+#       containers:
+#       - name: frontend
+#         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v27
+#         ports:
+#         - containerPort: 3000
+#         # Main application container configuration
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: trusted-service2
-spec:
-  selector:
-    app: multi-container-init-pod-2
-  ports:
-    - protocol: TCP
-      port: 9999
-      targetPort: 9999
-  type: LoadBalancer
+#       - name: backend
+#         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
+#         ports:
+#         - containerPort: 9797
+#         # Additional container configuration
+      
+#       - name: foundry
+#         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
+#         ports:
+#         - containerPort: 8545
+
+#       - name: trusted
+#         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
+#         ports:
+#         - containerPort: 9999
 
 # ---
-# apiVersion: autoscaling/v1
-# kind: HorizontalPodAutoscaler
+# apiVersion: v1
+# kind: Service
 # metadata:
-#   name: multi-container-autoscaler
+#   name: frontend-service2
 # spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: multi-container-deployment
-#   minReplicas: 1  # Minimum number of replicas
-#   maxReplicas: 3  # Maximum number of replicas
-#   targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage
+#   selector:
+#     app: multi-container-init-pod-2
+#   ports:
+#     - protocol: TCP
+#       port: 3000
+#       targetPort: 3000
+#   type: LoadBalancer
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: backend-service2
+# spec:
+#   selector:
+#     app: multi-container-init-pod-2
+#   ports:
+#     - protocol: TCP
+#       port: 9797
+#       targetPort: 9797
+#   type: LoadBalancer
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: foundry-service2
+# spec:
+#   selector:
+#     app: multi-container-init-pod-2
+#   ports:
+#     - protocol: TCP
+#       port: 8545
+#       targetPort: 8545
+#   type: LoadBalancer
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: trusted-service2
+# spec:
+#   selector:
+#     app: multi-container-init-pod-2
+#   ports:
+#     - protocol: TCP
+#       port: 9999
+#       targetPort: 9999
+#   type: LoadBalancer
+
+# # ---
+# # apiVersion: autoscaling/v1
+# # kind: HorizontalPodAutoscaler
+# # metadata:
+# #   name: multi-container-autoscaler
+# # spec:
+# #   scaleTargetRef:
+# #     apiVersion: apps/v1
+# #     kind: Deployment
+# #     name: multi-container-deployment
+# #   minReplicas: 1  # Minimum number of replicas
+# #   maxReplicas: 3  # Maximum number of replicas
+# #   targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage

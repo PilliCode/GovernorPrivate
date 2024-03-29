@@ -20,23 +20,34 @@ spec:
         ports:
         - containerPort: 3000
         # Main application container configuration
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 
       - name: backend
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
         ports:
         - containerPort: 9797
         # Additional container configuration
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
       
       - name: foundry
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
         ports:
         - containerPort: 8545
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 
       - name: trusted
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
         ports:
         - containerPort: 9999
-
+        resources:
+          limits:
+            memory: "150Mi"  # Increase memory limit to 150Mi
 ---
 apiVersion: v1
 kind: Service
@@ -92,17 +103,3 @@ spec:
       port: 9999
       targetPort: 9999
   type: LoadBalancer
-
-# ---
-# apiVersion: autoscaling/v1
-# kind: HorizontalPodAutoscaler
-# metadata:
-#   name: multi-container-autoscaler
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: multi-container-deployment
-#   minReplicas: 1  # Minimum number of replicas
-#   maxReplicas: 3  # Maximum number of replicas
-#   targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage
