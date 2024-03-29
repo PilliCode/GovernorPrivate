@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v2
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v27
         ports:
         - containerPort: 3000
         # Main application container configuration
