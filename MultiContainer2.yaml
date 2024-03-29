@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multi-container-deployment-26
+  name: multi-container-deployment-2
   labels:
-    app: multi-container-init-pod-26
+    app: multi-container-init-pod-2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: multi-container-init-pod-26
+      app: multi-container-init-pod-2
   template:
     metadata:
       labels:
-        app: multi-container-init-pod-26
+        app: multi-container-init-pod-2
     spec:
       containers:
       - name: frontend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v26
+        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v2
         ports:
         - containerPort: 3000
         # Main application container configuration
@@ -41,10 +41,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service26
+  name: frontend-service2
 spec:
   selector:
-    app: multi-container-init-pod-26
+    app: multi-container-init-pod-2
   ports:
     - protocol: TCP
       port: 3000
@@ -55,10 +55,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service26
+  name: backend-service2
 spec:
   selector:
-    app: multi-container-init-pod-26
+    app: multi-container-init-pod-2
   ports:
     - protocol: TCP
       port: 9797
@@ -69,10 +69,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: foundry-service26
+  name: foundry-service2
 spec:
   selector:
-    app: multi-container-init-pod-26
+    app: multi-container-init-pod-2
   ports:
     - protocol: TCP
       port: 8545
@@ -83,10 +83,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trusted-service26
+  name: trusted-service2
 spec:
   selector:
-    app: multi-container-init-pod-26
+    app: multi-container-init-pod-2
   ports:
     - protocol: TCP
       port: 9999
