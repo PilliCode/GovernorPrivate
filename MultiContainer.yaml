@@ -104,7 +104,6 @@ spec:
       - name: foundry-setup-container
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
         command: ["forge", "script", "script/Setup.s.sol:Setup", "--rpc-url", "http://0.0.0.0:8545", "--broadcast", "--code-size-limit", "30000"]
-    restartPolicy: Never
 # ---
 # apiVersion: autoscaling/v1
 # kind: HorizontalPodAutoscaler
