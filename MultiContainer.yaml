@@ -22,7 +22,7 @@ spec:
         # Main application container configuration
         resources:
           limits:
-            memory: "10Gi"  # Increase memory limit to 10Gi
+            memory: "4Gi"  # Increase memory limit to 4Gi
 
       - name: backend
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
@@ -31,7 +31,7 @@ spec:
         # Additional container configuration
         resources:
           limits:
-            memory: "10Gi"  # Increase memory limit to 10Gi
+            memory: "4Gi"  # Increase memory limit to 4Gi
       
       - name: foundry
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
@@ -39,7 +39,7 @@ spec:
         - containerPort: 8545
         resources:
           limits:
-            memory: "10Gi"  # Increase memory limit to 10Gi
+            memory: "4Gi"  # Increase memory limit to 4Gi
 
       - name: trusted
         image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
@@ -47,7 +47,7 @@ spec:
         - containerPort: 9999
         resources:
           limits:
-            memory: "10Gi"  # Increase memory limit to 10Gi
+            memory: "4Gi"  # Increase memory limit to 4Gi
 ---
 apiVersion: v1
 kind: Service
