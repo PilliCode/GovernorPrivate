@@ -8,8 +8,12 @@ echo "Waiting for the pod and all containers within it to be running..."
 while true; do
     pod_name=$(kubectl get pods --sort-by=.metadata.creationTimestamp -o=jsonpath='{.items[-1].metadata.name}')
     if [[ -n "$pod_name" ]]; then
-        if kubectl get pod $pod_name -o jsonpath='{.status.phase}' | grep -q "Running" && \
-           kubectl get pod $pod_name -o jsonpath='{.status.containerStatuses[*].state.running}' | grep -q "true"; then
+        pod_status=$(kubectl get pod $pod_name -o jsonpath='{.status.phase}')
+        container_status=$(kubectl get pod $pod_name -o jsonpath='{.status.containerStatuses[*].state.running}')
+        echo "Pod status: $pod_status"
+        echo "Container status: $container_status"
+
+        if [[ "$pod_status" == "Running" && "$container_status" == "true" ]]; then
             echo "Pod $pod_name and all containers within it are running."
             break
         fi
