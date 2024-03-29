@@ -9,11 +9,18 @@ while true; do
     pod_name=$(kubectl get pods --sort-by=.metadata.creationTimestamp -o=jsonpath='{.items[-1].metadata.name}')
     if [[ -n "$pod_name" ]]; then
         pod_status=$(kubectl get pod $pod_name -o jsonpath='{.status.phase}')
-        container_status=$(kubectl get pod $pod_name -o jsonpath='{.status.containerStatuses[*].state.running}')
-        echo "Pod status: $pod_status"
-        echo "Container status: $container_status"
+        container_statuses=$(kubectl get pod $pod_name -o jsonpath='{.status.containerStatuses[*].state.running}')
 
-        if [[ "$pod_status" == "Running" && "$container_status" == "true" ]]; then
+        # Check if all containers are running
+        all_containers_running=true
+        for container_status in $container_statuses; do
+            if [[ "$container_status" != "true" ]]; then
+                all_containers_running=false
+                break
+            fi
+        done
+
+        if [[ "$pod_status" == "Running" && "$all_containers_running" == "true" ]]; then
             echo "Pod $pod_name and all containers within it are running."
             break
         fi
