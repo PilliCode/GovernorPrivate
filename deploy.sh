@@ -1,8 +1,21 @@
 #!/bin/bash
 
-# Apply the YAML file
-kubectl apply -f MultiContainer.yaml
+# Determine YAML filename
+if [ -n "$1" ]; then
+    number=$1
+    yaml_file="MultiContainer${number}.yaml"
+else
+    yaml_file="MultiContainer.yaml"
+fi
 
+# Check if YAML file exists
+if [ ! -f "$yaml_file" ]; then
+    echo "Error: $yaml_file does not exist"
+    exit 1
+fi
+
+# Apply the YAML file
+kubectl apply -f "$yaml_file"
 # Wait for the pod to be running and all containers within it to be running
 echo "Waiting for the pod and all containers within it to be running..."
 while true; do
