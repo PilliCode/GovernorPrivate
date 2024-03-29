@@ -1,11 +1,11 @@
 // export const backend_ip = "http://34.94.30.117:9797"
-export const backend_ip = "http://35.235.104.220:9797"
+export const backend_ip = "http://34.102.80.0:9797"
 
 // export const foundry_ip = "http://34.94.17.84:8545"
-export const foundry_ip = "http://34.94.30.170:8545"
+export const foundry_ip = "http://34.102.124.160:8545"
 
 // export const trusted_auth_ip = "http://35.236.12.105:9999"
-export const trusted_auth_ip = "http://35.235.93.154:9999"
+export const trusted_auth_ip = "http://34.94.10.170:9999"
 
 export const timelock = "0x09635f643e140090a9a8dcd712ed6285858cebef"
 // export const token = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
