@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Apply the YAML file
+kubectl apply -f MultiContainer.yaml
+
+# Wait for the pod to be running and all containers within it to be running
+echo "Waiting for the pod and all containers within it to be running..."
+while true; do
+    pod_name=$(kubectl get pods --sort-by=.metadata.creationTimestamp -o=jsonpath='{.items[-1].metadata.name}')
+    if [[ -n "$pod_name" ]]; then
+        if kubectl get pod $pod_name -o jsonpath='{.status.phase}' | grep -q "Running" && \
+           kubectl get pod $pod_name -o jsonpath='{.status.containerStatuses[*].state.running}' | grep -q "true"; then
+            echo "Pod $pod_name and all containers within it are running."
+            break
+        fi
+    fi
+    sleep 5
+done
+
+# Run the command on the most recently created pod
+echo "Running command on the most recently created pod: $pod_name"
+kubectl exec $pod_name -c foundry -- forge script script/Setup.s.sol:Setup --rpc-url http://0.0.0.0:8545 --broadcast --code-size-limit 30000
