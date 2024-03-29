@@ -91,7 +91,7 @@ export default function ContractSetupPage() {
       if (logs.length > 0) {
         setData("Successfully deployed contract");
       }
-      setData("Setting up delegate accounts");
+      setData("Setting up delegate accounts. Take a snack break this will take a few minutes...");
       const r = await SetupDelegates();
       setData("Successful initialization");
       setLoading(false)
