@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container-deployment-3
+  labels:
+    app: multi-container-init-pod-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multi-container-init-pod-3
+  template:
+    metadata:
+      labels:
+        app: multi-container-init-pod-3
+    spec:
+      containers:
+      - name: frontend
+        image: us-west3-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v28
+        ports:
+        - containerPort: 3000
+        # Main application container configuration
+
+      - name: backend
+        image: us-west3-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
+        ports:
+        - containerPort: 9797
+        # Additional container configuration
+      
+      - name: foundry
+        image: us-west3-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
+        ports:
+        - containerPort: 8545
+
+      - name: trusted
+        image: us-west3-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
+        ports:
+        - containerPort: 9999
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service3
+spec:
+  selector:
+    app: multi-container-init-pod-3
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service3
+spec:
+  selector:
+    app: multi-container-init-pod-3
+  ports:
+    - protocol: TCP
+      port: 9797
+      targetPort: 9797
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: foundry-service3
+spec:
+  selector:
+    app: multi-container-init-pod-3
+  ports:
+    - protocol: TCP
+      port: 8545
+      targetPort: 8545
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trusted-service3
+spec:
+  selector:
+    app: multi-container-init-pod-3
+  ports:
+    - protocol: TCP
+      port: 9999
+      targetPort: 9999
+  type: LoadBalancer
+
+# ---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: multi-container-autoscaler
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: multi-container-deployment
+#   minReplicas: 1  # Minimum number of replicas
+#   maxReplicas: 3  # Maximum number of replicas
+#   targetCPUUtilizationPercentage: 90  # Target average CPU utilization percentage
