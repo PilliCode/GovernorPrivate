@@ -5,6 +5,7 @@ metadata:
   labels:
     app: multi-container-init-pod
 spec:
+  replicas: 10
   selector:
     matchLabels:
       app: multi-container-init-pod
@@ -91,7 +92,6 @@ spec:
       port: 9999
       targetPort: 9999
   type: LoadBalancer
-
 
 # ---
 # apiVersion: autoscaling/v1
