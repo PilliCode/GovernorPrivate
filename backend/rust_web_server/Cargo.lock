@@ -4306,6 +4306,7 @@ dependencies = [
  "libsecp256k1",
  "num-bigint 0.4.4",
  "num-traits",
+ "once_cell",
  "poseidon-rs",
  "rand 0.8.5",
  "rocket",

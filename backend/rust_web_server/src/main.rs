@@ -46,6 +46,9 @@ use election_start::{options_election_start,election_start_call};
 mod private_vote;
 use private_vote::{options_private_vote, private_vote_call};
 
+mod one_user;
+use one_user::{enter_website};
+
 pub struct Cors;
 
 #[rocket::async_trait]
@@ -91,6 +94,7 @@ fn rocket() -> _ {
                 options_election_start,
                 options_private_vote,
                 private_vote_call,
+                enter_website,
             ],
         )
 }

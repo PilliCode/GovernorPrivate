@@ -39,6 +39,31 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export default function WelcomePage() {
+  function enterAndNav() {
+    axios
+      .get(backend_ip + "/enter")
+      .then((response) => {
+        // If the response indicates success, allow the user to proceed
+        console.log(response.data);
+        if (response.data === "Welcome to the website!") {
+          navigate("/setup");
+        } else {
+          setAddInfo(
+            "Site currently in use. Wait a few minutes and try again!"
+          );
+        }
+      })
+      .catch((error) => {
+        // If the response indicates redirection, display a message and redirect the user
+        if (error.response.status == 302) {
+          document.getElementById("message").textContent =
+            "Please wait for an available slot.";
+          setTimeout(function () {
+            window.location = error.response.headers.Location;
+          }, 3000);
+        }
+      });
+  }
   const navigate = useNavigate();
   console.log("Test 2")
   return (
@@ -222,7 +247,7 @@ export default function WelcomePage() {
             <Button
               marginTop={"4vh"}
               marginBottom={"4vh"}
-              onClick={() => navigate("/setup")}
+              onClick={enterAndNav}
             >
               Experience Governance
             </Button>
