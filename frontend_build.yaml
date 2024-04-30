@@ -1,3 +1,11 @@
 steps:
 - name: "gcr.io/cloud-builders/docker"
-  args: [ 'build', '-t', 'us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1', '-file', './Dockerfile.frontend', '.' ]
+  args: 
+    - build
+    - '-t'
+    - 'us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1'
+    - '--file=./Dockerfile.frontend'
+    - '.'
+
+images:
+- "us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1"
