@@ -5,6 +5,5 @@ steps:
   - "--tag=us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1 "
   - "--file=./Dockerfile.frontend"
   - .
-...
 images:
 - "us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1"
