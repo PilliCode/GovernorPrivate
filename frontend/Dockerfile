@@ -4,13 +4,13 @@ FROM node:latest as frontend
 WORKDIR /app/frontend
 
 # Copy package.json and package-lock.json files
-COPY frontend/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the frontend code
-COPY frontend .
+COPY . .
 
 EXPOSE 3000
 #  
