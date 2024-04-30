@@ -887,8 +887,11 @@ export default function NounsPage() {
               <HStack id="proposalstack">
                 <img id="nounsicon" src="nounsicon.jpg"></img>
                 <VStack id="verticalstack">
+                <HStack width={"17vw"} whiteSpace={"nowrap"} overflow={"hidden"} textOverflow={"ellipsis"} >
                   <p>{proposal.title} </p>
-                  <HStack>
+                </HStack>
+
+                  <HStack width={"22vw"}>
                     {proposal.status === "Pending" ? (
                       <Tag color="purple">Pending</Tag>
                     ) : proposal.status === "Awaiting init" ? (
@@ -919,9 +922,7 @@ export default function NounsPage() {
                   <p id="votesfor">{proposal.for}%</p>
                   <p id="votesagainst">{proposal.against}%</p>
                   <p id="votestotal">{proposal.abstain}%</p>
-                </HStack>)}
-
-                
+                </HStack>)}                
                 
               </HStack>
             </a>
