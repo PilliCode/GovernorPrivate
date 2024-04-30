@@ -1,0 +1,44 @@
+
+
+FROM --platform=linux/amd64 node:lts-bookworm-slim
+SHELL ["/bin/bash", "-c"]
+RUN apt update && apt install -y curl bash git tar gzip libc++-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+# RUN curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+# ENV PATH="/root/.nargo/bin:$PATH"
+# RUN noirup
+# ENTRYPOINT ["nargo"]
+
+# install rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
+
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --help
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Confirm Rust installation
+RUN cargo install --git https://github.com/foundry-rs/foundry --profile local --locked forge cast chisel anvil
+
+# RUN curl -L https://foundry.paradigm.xyz | bash
+
+WORKDIR /app
+COPY gov_foundry/ ./gov_foundry
+
+WORKDIR /app/gov_foundry
+
+EXPOSE 8545
+# FROM ghcr.io/foundry-rs/foundry
+
+RUN forge install --no-git foundry-rs/forge-std 
+RUN forge install --no-git OpenZeppelin/openzeppelin-contracts
+
+RUN forge build
+
+# CMD ["forge", "-h"]
+ENTRYPOINT anvil --base-fee 0 --balance 1000000000000 --accounts 25 --code-size-limit 30000 --host 0.0.0.0 --port 8545 
+# ENTRYPOINT forge script script/Setup.s.sol:Setup --rpc-url http://0.0.0.0:8545 --broadcast --code-size-limit 30000
+# CMD ["anvil", "--base-fee", "0", "--balance", "1000000000000", "--accounts", "25", "--code-size-limit", "30000", ]
+# CMD ["forge", "script", "script/Setup.s.sol:Setup", "--rpc-url", "http://foundry:8545", "--broadcast", "--code-size-limit", "30000"]

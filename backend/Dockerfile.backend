@@ -1,0 +1,39 @@
+# Use a base image with Rust for the backend
+FROM rust:1.71.0 as backend
+
+# Set the working directory for the backend
+WORKDIR /app/backend/rust_web_server
+
+# Copy the Cargo.toml and Cargo.lock files
+COPY backend/rust_web_server/Cargo.toml backend/rust_web_server/Cargo.lock ./
+
+# Copy the rest of the backend code
+COPY backend/rust_web_server/src ./src
+
+# Build the backend
+RUN cargo build --release
+
+# Start a new stage for the final image
+FROM debian:bullseye
+
+WORKDIR /app
+
+SHELL ["/bin/bash", "-c"]
+RUN apt update && apt install -y curl bash git tar gzip libc++-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+RUN curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+ENV PATH="/root/.nargo/bin:$PATH"
+RUN noirup
+COPY privatevotingzkproofs-main ./privatevotingzkproofs
+# Copy the built backend binary from the backend stage
+COPY --from=backend /app/backend/rust_web_server/target/release/rust_web_server /app/backend
+
+# Expose the port your backend is listening on
+EXPOSE 9797
+
+# Command to run the backend
+CMD ["./backend"]
