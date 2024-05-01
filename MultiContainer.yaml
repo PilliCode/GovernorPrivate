@@ -16,24 +16,24 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/frontend:v24
+        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:1
         ports:
         - containerPort: 3000
         # Main application container configuration
 
       - name: backend
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/backend:v5
+        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/backend:1
         ports:
         - containerPort: 9797
         # Additional container configuration
       
       - name: foundry
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/foundry:v5
+        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/foundry:1
         ports:
         - containerPort: 8545
 
       - name: trusted
-        image: us-west2-docker.pkg.dev/governance-417015/gov-repo-final/trusted:v5
+        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/trusted:1
         ports:
         - containerPort: 9999
 
