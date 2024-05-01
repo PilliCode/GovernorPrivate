@@ -32,8 +32,8 @@ WORKDIR /app/gov_foundry
 EXPOSE 8545
 # FROM ghcr.io/foundry-rs/foundry
 
-# RUN forge install --no-git foundry-rs/forge-std 
-# RUN forge install --no-git OpenZeppelin/openzeppelin-contracts
+RUN forge install --no-git foundry-rs/forge-std 
+RUN forge install --no-git OpenZeppelin/openzeppelin-contracts
 
 RUN forge build
 
