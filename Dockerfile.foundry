@@ -33,7 +33,7 @@ EXPOSE 8545
 # FROM ghcr.io/foundry-rs/foundry
 
 RUN forge install --no-git foundry-rs/forge-std 
-RUN forge install --no-git OpenZeppelin/openzeppelin-contracts@v4.8.3
+RUN forge install --no-git OpenZeppelin/openzeppelin-contracts@v4.9.6
 # RUN forge install --no-git openzeppelin-contracts-05=OpenZeppelin/openzeppelin-contracts@v2.5.0 openzeppelin-contracts-06=OpenZeppelin/openzeppelin-contracts@v3.4.0 openzeppelin-contracts-08=OpenZeppelin/openzeppelin-contracts@v4.8.3 --no-commit
 RUN forge build
 
