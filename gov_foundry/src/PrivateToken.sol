@@ -10,7 +10,7 @@ contract PrivateToken is ERC20, Ownable, ERC20Permit {
 
     constructor(address initialOwner)
         ERC20("PrivateToken", "PVT")
-        Ownable(initialOwner)
+        Ownable()
         ERC20Permit("PrivateToken")
     {}
 
