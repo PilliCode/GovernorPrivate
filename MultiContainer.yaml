@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:3
+        image: us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:4
         ports:
         - containerPort: 3000
         # Main application container configuration
