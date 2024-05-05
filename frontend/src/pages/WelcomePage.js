@@ -39,6 +39,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { backend_ip } from "../util/const";
 import axios from "axios";
+import { useState } from "react";
+
 
 export default function WelcomePage() {
   const [addInfo, setAddInfo] = useState("");
