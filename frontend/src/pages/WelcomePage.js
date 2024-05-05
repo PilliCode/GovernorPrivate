@@ -37,8 +37,13 @@ import {
   WarningTwoIcon,
 } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { backend_ip } from "../util/const";
+import axios from "axios";
 
 export default function WelcomePage() {
+  const [addInfo, setAddInfo] = useState("");
+  const navigate = useNavigate();
+
   function enterAndNav() {
     axios
       .get(backend_ip + "/enter")
@@ -46,7 +51,7 @@ export default function WelcomePage() {
         // If the response indicates success, allow the user to proceed
         console.log(response.data);
         if (response.data === "Welcome to the website!") {
-          navigate("/setup");
+          navigate("/nouns");
         } else {
           setAddInfo(
             "Site currently in use. Wait a few minutes and try again!"
@@ -64,8 +69,7 @@ export default function WelcomePage() {
         }
       });
   }
-  const navigate = useNavigate();
-  console.log("Test 2")
+  console.log("Test 2");
   return (
     <div className="defaultbackground">
       <NavBar />
@@ -240,7 +244,10 @@ export default function WelcomePage() {
             textAlign={"start"}
           >
             <div>
-              Some of the steps will take around a minute and a half to complete. The backend is generating zero knowledge proofs and setting up the all of the demo accounts. Unless an error pops up it is likely working just give it some time to finish!
+              Some of the steps will take around a minute and a half to
+              complete. The backend is generating zero knowledge proofs and
+              setting up the all of the demo accounts. Unless an error pops up
+              it is likely working just give it some time to finish!
             </div>
           </HStack>
           <Center>
@@ -251,6 +258,9 @@ export default function WelcomePage() {
             >
               Experience Governance
             </Button>
+          </Center>
+          <Center marginBottom={"4vh"} textColor={"red"}>
+            <div>{addInfo}</div>
           </Center>
         </Card>
       </Container>
