@@ -3,9 +3,9 @@ steps:
   args: 
     - build
     - '-t'
-    - 'us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:4'
+    - 'us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:5'
     - '--file=./Dockerfile.frontend'
     - '.'
 
 images:
-- "us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:4"
+- "us-west2-docker.pkg.dev/governorprivate/gov-repo/frontend:5"
